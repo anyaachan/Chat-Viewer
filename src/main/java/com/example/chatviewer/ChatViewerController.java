@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 public class ChatViewerController {
     @FXML
     private Label welcomeText;
+    @FXML
     private Button openButton;
 
     private ImportUtils importUtils = new ImportUtils();
