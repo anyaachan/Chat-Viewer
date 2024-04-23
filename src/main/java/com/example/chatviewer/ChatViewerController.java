@@ -10,7 +10,7 @@ import javafx.scene.control.Button;
 // Class which will be connected to our graphical interface
 public class ChatViewerController {
     @FXML
-    private Label welcomeText;
+    private Label infoLabel;
     @FXML
     private Button openButton;
 
@@ -18,12 +18,9 @@ public class ChatViewerController {
 
     @FXML
     public void openMsgFile(ActionEvent event) {
-        try {
-            importUtils.openMsgFile();
-        }
-        catch(Exception e) {
-            System.out.println("Error: " + e.getMessage());
-        }
+        String msgFilePath = importUtils.openMsgFile();
+        infoLabel.setText(msgFilePath);
+        importUtils.readMsgFile(msgFilePath);
     }
 }
 
