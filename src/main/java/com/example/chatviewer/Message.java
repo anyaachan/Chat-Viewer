@@ -1,5 +1,9 @@
 package com.example.chatviewer;
 
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Message {
     private String timestamp;
     private String nickname;
@@ -28,5 +32,19 @@ public class Message {
 
     public String getContent() {
         return content;
+    }
+
+
+    public ArrayList<String> splitMessageByEmoticonSymbols() {
+        ArrayList<String> parts = new ArrayList<>();
+
+        Pattern pattern = Pattern.compile("(:\\)|:\\(|(?:(?!:\\)|:\\().)+)");
+        Matcher matcher = pattern.matcher(content);
+
+        while (matcher.find()) {
+            parts.add(matcher.group());
+        }
+
+        return parts;
     }
 }

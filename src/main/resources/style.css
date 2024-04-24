@@ -1,0 +1,7 @@
+.list-cell, .list-cell::focused {
+    -fx-border-radius: 20;
+}
+
+.list-cell {
+-fx-background-color: transparent;
+}

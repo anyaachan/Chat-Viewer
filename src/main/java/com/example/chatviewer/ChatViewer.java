@@ -13,10 +13,10 @@ public class ChatViewer extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(ChatViewer.class.getResource("ChatViewerView.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Hello!");
+        stage.setTitle("Chat Viewer");
         stage.setScene(scene);
         stage.show();
-
+        scene.getStylesheets().add("style.css");
     }
 
     public static void main(String[] args) {

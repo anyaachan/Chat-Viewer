@@ -25,14 +25,14 @@ public class ChatViewerController {
     private Button openButton;
     @FXML
     private ListView<Message> messageListView;
-    private ImportUtils importUtils = new ImportUtils();
+    private FileImportManager fileImportManager = new FileImportManager();
 
     public ArrayList<Message> replaceSameNicknamesWithDots(ArrayList<Message> messages){
         String messageName = messages.get(0).getNickname();
         for (int i = 0; i < messages.size(); i++) {
             Message message = messages.get(i);
             if ((Objects.equals(message.getNickname(), messageName)) && (i != 0)) {
-                message.setNickname("...");
+                message.setNickname(" ");
             } else {
                 messageName = message.getNickname();
             }
@@ -40,24 +40,14 @@ public class ChatViewerController {
         return messages;
     }
 
-    public ArrayList<String> convertMessageToTextflow (String message) {
-        ArrayList<String> parts = new ArrayList<>();
-
-        Pattern pattern = Pattern.compile("(:\\)|:\\(|(?:(?!:\\)|:\\().)+)");
-        Matcher matcher = pattern.matcher(message);
-
-        while (matcher.find()) {
-            parts.add(matcher.group());
-        }
-
-        return parts;
-    }
-
     @FXML
     public void openMsgFile(ActionEvent event) {
-        String msgFilePath = importUtils.openMsgFile();
-        infoLabel.setText(msgFilePath);
-        ArrayList<Message> messages = importUtils.readMsgFile(msgFilePath);
+        String msgFilePath = fileImportManager.openMsgFile();
+        String[] msgFilePathArray = msgFilePath.split("/");
+        String msgFileName = msgFilePathArray[msgFilePathArray.length - 1];
+        infoLabel.setText(msgFileName);
+
+        ArrayList<Message> messages = fileImportManager.readMsgFile(msgFilePath);
         messages = replaceSameNicknamesWithDots(messages);
         // Convert ArrayList to ObservableList, as ListView requires ObservableList. ObservableList allows listeners to track changes when they occur.
         ObservableList<Message> observableMessages = FXCollections.observableArrayList(messages);
@@ -80,13 +70,13 @@ public class ChatViewerController {
                         } else {
                             Text timestampText = new Text("[" + message.getTimestamp() + "] ");
                             Text nameText = new Text(message.getNickname() + ": ");
-                            // Apply styling to each part of the message
+
                             timestampText.setStyle("-fx-fill: black;");
                             nameText.setStyle("-fx-fill: blue;");
 
                             TextFlow textFlow = new TextFlow(timestampText, nameText);
 
-                            ArrayList<String> messageParts = convertMessageToTextflow(message.getContent());
+                            ArrayList<String> messageParts = message.splitMessageByEmoticonSymbols();
                             System.out.println(messageParts);
                             for (String part : messageParts) {
                                 System.out.println(part);
@@ -105,9 +95,11 @@ public class ChatViewerController {
 
                             setGraphic(textFlow);  // Set the graphic of the cell to the styled TextFlow
 
-
-
                         }
+
+                        setPrefWidth(0); // Use Pref Width 0 for "use compute size"
+                        setMaxWidth(Double.MAX_VALUE); // Allow cell to grow horizontally
+                        setPrefWidth(1); // Use Pref Width 1 for "grow as needed"
                     }
 
                 };
