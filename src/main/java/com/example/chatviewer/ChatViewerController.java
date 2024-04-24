@@ -14,7 +14,8 @@ import javafx.scene.image.ImageView;
 import javafx.util.Callback;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 // Class which will be connected to our graphical interface
 public class ChatViewerController {
@@ -39,7 +40,19 @@ public class ChatViewerController {
         return messages;
     }
 
-    public
+    public ArrayList<String> convertMessageToTextflow (String message) {
+        ArrayList<String> parts = new ArrayList<>();
+
+        Pattern pattern = Pattern.compile("(:\\)|:\\(|(?:(?!:\\)|:\\().)+)");
+        Matcher matcher = pattern.matcher(message);
+
+        while (matcher.find()) {
+            parts.add(matcher.group());
+        }
+
+        return parts;
+    }
+
     @FXML
     public void openMsgFile(ActionEvent event) {
         String msgFilePath = importUtils.openMsgFile();
@@ -67,15 +80,33 @@ public class ChatViewerController {
                         } else {
                             Text timestampText = new Text("[" + message.getTimestamp() + "] ");
                             Text nameText = new Text(message.getNickname() + ": ");
-                            Text messageText = new Text(message.getContent());
-
                             // Apply styling to each part of the message
                             timestampText.setStyle("-fx-fill: black;");
                             nameText.setStyle("-fx-fill: blue;");
-                            messageText.setStyle("-fx-fill: black; -fx-font-weight: bold;");
 
-                            TextFlow textFlow = new TextFlow(timestampText, nameText, messageText);
+                            TextFlow textFlow = new TextFlow(timestampText, nameText);
+
+                            ArrayList<String> messageParts = convertMessageToTextflow(message.getContent());
+                            System.out.println(messageParts);
+                            for (String part : messageParts) {
+                                System.out.println(part);
+                                if (part.equals(":)")) {
+                                    ImageView happyImage = new ImageView("smile_happy.gif");
+                                    textFlow.getChildren().add(happyImage);
+                                } else if (part.equals(":(")) {
+                                    ImageView sadImage = new ImageView("smile_sad.gif");
+                                    textFlow.getChildren().add(sadImage);
+                                } else {
+                                    Text messageTextPart = new Text(part);
+                                    messageTextPart.setStyle("-fx-fill: black; -fx-font-weight: bold;");
+                                    textFlow.getChildren().add(messageTextPart);
+                                }
+                            }
+
                             setGraphic(textFlow);  // Set the graphic of the cell to the styled TextFlow
+
+
+
                         }
                     }
 
