@@ -30,13 +30,14 @@ public class ImportUtils {
         return msgFilePath;
     }
 
-    public void readMsgFile(String msgFilePath) {
-        try {
-            File msgFile = new File(msgFilePath);
-            ArrayList<Message> msgObjects = new ArrayList<Message>();
-            String strCurrentLine;
+    public ArrayList<Message> readMsgFile(String msgFilePath) {
+        File msgFile = new File(msgFilePath);
+        ArrayList<Message> msgObjects = new ArrayList<Message>();
 
-            BufferedReader objReader = new BufferedReader(new FileReader(msgFile));
+        // Using try with BufferedReader as a resource to ensure that it will be closed if an exception occurs
+        try(BufferedReader objReader = new BufferedReader(new FileReader(msgFile))) {
+            String strCurrentLine;
+            String[] messageContent;
 
             while ((strCurrentLine = objReader.readLine()) != null) {
                 if (strCurrentLine.startsWith("Time")) {
@@ -50,15 +51,19 @@ public class ImportUtils {
 
                     strCurrentLine = objReader.readLine();
                     if (strCurrentLine != null && strCurrentLine.startsWith("Message")) {
-                        message.setContent(strCurrentLine.split("Message:")[1].trim());
+                        messageContent = strCurrentLine.split("Message:");
+                        if (messageContent.length != 0) {
+                            message.setContent(messageContent[1].trim());
+                        } else {
+                            message.setContent(" ");
+                        }
                     }
-
                     msgObjects.add(message);
                 }
             }
             for (Message msg : msgObjects) {
                 System.out.println(
-                                "Time: " + msg.getTimestamp() +
+                        "Time: " + msg.getTimestamp() +
                                 ", Name: " + msg.getNickname() +
                                 ", Message: " + msg.getContent()
                 );
@@ -67,6 +72,7 @@ public class ImportUtils {
             System.out.println("Failed to open the file: " + e.getMessage());
         }
 
+        return msgObjects;
     }
 }
 
