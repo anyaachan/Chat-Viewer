@@ -35,32 +35,34 @@ public class ImportUtils {
         ArrayList<Message> msgObjects = new ArrayList<Message>();
 
         // Using try with BufferedReader as a resource to ensure that it will be closed if an exception occurs
-        try(BufferedReader objReader = new BufferedReader(new FileReader(msgFile))) {
+        try (BufferedReader objReader = new BufferedReader(new FileReader(msgFile))) {
             String strCurrentLine;
             String[] messageContent;
+            Message message = null;
 
             while ((strCurrentLine = objReader.readLine()) != null) {
                 if (strCurrentLine.startsWith("Time")) {
-                    Message message = new Message();
-                    message.setTimestamp(strCurrentLine.split("Time:")[1].trim());
-
-                    strCurrentLine = objReader.readLine();
-                    if (strCurrentLine != null && strCurrentLine.startsWith("Name")) {
-                        message.setNickname(strCurrentLine.split("Name:")[1].trim());
+                    if (message != null) {
+                        msgObjects.add(message);
                     }
-
-                    strCurrentLine = objReader.readLine();
-                    if (strCurrentLine != null && strCurrentLine.startsWith("Message")) {
-                        messageContent = strCurrentLine.split("Message:");
-                        if (messageContent.length != 0) {
-                            message.setContent(messageContent[1].trim());
-                        } else {
-                            message.setContent(" ");
-                        }
+                    message = new Message();
+                    message.setTimestamp(strCurrentLine.split("Time\\s*:")[1].trim());
+                } else if (strCurrentLine.startsWith("Name")) {
+                    message.setNickname(strCurrentLine.split("Name\\s*:")[1].trim());
+                } else if (strCurrentLine.startsWith("Message")) {
+                    messageContent = strCurrentLine.split("Message\\s*:");
+                    if (messageContent.length != 0) {
+                        message.setContent(messageContent[1].trim());
+                    } else {
+                        message.setContent(" ");
                     }
-                    msgObjects.add(message);
                 }
             }
+            // Add the last message as it won't be added in the loop
+            if (message != null) {
+                msgObjects.add(message);
+            }
+
             for (Message msg : msgObjects) {
                 System.out.println(
                         "Time: " + msg.getTimestamp() +
