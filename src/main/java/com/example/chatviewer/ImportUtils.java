@@ -24,7 +24,6 @@ public class ImportUtils {
         Stage mainStage = new Stage();
         File msg = fileChooser.showOpenDialog(mainStage);
         String msgFilePath = msg.getAbsolutePath();
-
         System.out.println(msg);
 
         return msgFilePath;
@@ -73,7 +72,6 @@ public class ImportUtils {
         } catch (IOException e) {
             System.out.println("Failed to open the file: " + e.getMessage());
         }
-
         return msgObjects;
     }
 }
