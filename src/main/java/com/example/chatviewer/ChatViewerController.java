@@ -5,6 +5,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -27,7 +29,7 @@ public class ChatViewerController {
 
 
     @FXML
-    public void openMsgFile(ActionEvent event) {
+    public void openMsgFile(ActionEvent event) throws IOException {
         Conversation conversation = new Conversation();
         String msgFilePath = null;
 
@@ -49,10 +51,10 @@ public class ChatViewerController {
 
         // Get messages and set them to the conversation. Even if the msgObject is  empty, it will be handled in the next step.
         ArrayList<Message> msgObjects = fileImportManager.readMsgFile(msgFilePath);
-        conversation.setMessages(msgObjects);
-
+        System.out.println(msgObjects.size());
         // Catch any error occuring due to the msg file having incorrect messages format inside
         try {
+            conversation.setMessages(msgObjects);
             conversation.replaceSameNicknamesWithDots();
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);

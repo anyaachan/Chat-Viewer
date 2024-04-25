@@ -29,42 +29,42 @@ public class FileImportManager {
         return msgFilePath;
     }
 
-    public ArrayList<Message> readMsgFile(String msgFilePath) {
+    public ArrayList<Message> readMsgFile(String msgFilePath) throws IOException {
         File msgFile = new File(msgFilePath);
         ArrayList<Message> msgObjects = new ArrayList<Message>();
-        BufferedReader objReader = new BufferedReader(new FileReader(msgFile));
 
         // Using try with BufferedReader as a resource to ensure that it will be closed if an exception occurs
         String strCurrentLine;
         String[] messageContent;
         Message message = null;
 
-        while ((strCurrentLine = objReader.readLine()) != null) {
-            if (strCurrentLine.startsWith("Time")) {
+        try (BufferedReader objReader = new BufferedReader(new FileReader(msgFile))) {
+            while ((strCurrentLine = objReader.readLine()) != null) {
+                if (strCurrentLine.startsWith("Time")) {
 
-                if ((message != null) && (message.getTimestamp() != null) && (message.getNickname() != null) && (message.getContent() != null)) {
-                    msgObjects.add(message);
-                } else {
-                    return new ArrayList<Message>();
-                }
+                    if ((message != null) && (message.getTimestamp() != null) && (message.getNickname() != null) && (message.getContent() != null)) {
+                        msgObjects.add(message);
+                    }
 
-                message = new Message();
-                message.setTimestamp(strCurrentLine.split("Time\\s*:")[1].trim());
-            } else if (strCurrentLine.startsWith("Name")) {
-                message.setNickname(strCurrentLine.split("Name\\s*:")[1].trim());
-            } else if (strCurrentLine.startsWith("Message")) {
-                messageContent = strCurrentLine.split("Message\\s*:");
-                if (messageContent.length != 0) {
-                    message.setContent(messageContent[1].trim());
+                    message = new Message();
+                    message.setTimestamp(strCurrentLine.split("Time\\s*:")[1].trim());
+                } else if (strCurrentLine.startsWith("Name")) {
+                    message.setNickname(strCurrentLine.split("Name\\s*:")[1].trim());
+                } else if (strCurrentLine.startsWith("Message")) {
+                    messageContent = strCurrentLine.split("Message\\s*:");
+                    if (messageContent.length != 0) {
+                        message.setContent(messageContent[1].trim());
+                    }
                 }
             }
-        }
 
-        // Add the last message as it won't be added in the loop
-        if ((message != null) && (message.getTimestamp() != null) && (message.getNickname() != null) && (message.getContent() != null)) {
-            msgObjects.add(message);
-        } else {
-            return new ArrayList<Message>();
+            // Add the last message as it won't be added in the loop
+            if ((message != null) && (message.getTimestamp() != null) && (message.getNickname() != null) && (message.getContent() != null)) {
+                msgObjects.add(message);
+            }
+
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
         }
 
         return msgObjects;
