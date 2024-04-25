@@ -8,14 +8,14 @@ import javafx.collections.FXCollections;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Objects;
+
+import javafx.scene.image.Image;
+import javafx.scene.shape.SVGPath;
 
 import javafx.scene.image.ImageView;
 import javafx.util.Callback;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 // Class which will be connected to our graphical interface
 public class ChatViewerController {
@@ -24,9 +24,23 @@ public class ChatViewerController {
     @FXML
     private Button openButton;
     @FXML
+    private Button themeSwitch;
+    @FXML
     private ListView<Message> messageListView;
     private FileImportManager fileImportManager = new FileImportManager();
 
+
+    public void initialize() {
+        openButton.setPickOnBounds(true);
+
+        ImageView themeImageView = new ImageView(new Image("theme-switch.png"));
+        themeImageView.setFitWidth(40);
+        themeImageView.setFitHeight(40);
+
+        themeSwitch.setPickOnBounds(true);
+        themeSwitch.getStyleClass().add("theme-switch-button");
+        themeSwitch.setGraphic(themeImageView);
+    }
 
     @FXML
     public void openMsgFile(ActionEvent event) throws IOException {
@@ -52,6 +66,7 @@ public class ChatViewerController {
         // Get messages and set them to the conversation. Even if the msgObject is  empty, it will be handled in the next step.
         ArrayList<Message> msgObjects = fileImportManager.readMsgFile(msgFilePath);
         System.out.println(msgObjects.size());
+
         // Catch any error occuring due to the msg file having incorrect messages format inside
         try {
             conversation.setMessages(msgObjects);
@@ -126,7 +141,6 @@ public class ChatViewerController {
                         setPrefWidth(0);
                         setMaxWidth(Double.MAX_VALUE);
                     }
-
                 };
             }
         });

@@ -5,3 +5,10 @@
 .list-cell {
 -fx-background-color: transparent;
 }
+
+.theme-switch-button {
+  -fx-background-color: transparent;
+}
+
+.theme-switch-button:selected {
+}
