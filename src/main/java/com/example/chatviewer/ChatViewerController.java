@@ -26,6 +26,8 @@ public class ChatViewerController {
     @FXML
     private Button themeSwitch;
     @FXML
+    private Button getHelpButton;
+    @FXML
     private ListView<Message> messageListView;
     private FileImportManager fileImportManager = new FileImportManager();
 
@@ -40,6 +42,14 @@ public class ChatViewerController {
         themeSwitch.setPickOnBounds(true);
         themeSwitch.getStyleClass().add("theme-switch-button");
         themeSwitch.setGraphic(themeImageView);
+
+        ImageView getHelpImageView = new ImageView(new Image("question-mark.png"));
+        getHelpImageView.setFitWidth(40);
+        getHelpImageView.setFitHeight(40);
+
+        getHelpButton.setPickOnBounds(true);
+        getHelpButton.getStyleClass().add("help-button");
+        getHelpButton.setGraphic(getHelpImageView);
     }
 
     @FXML
@@ -120,7 +130,6 @@ public class ChatViewerController {
 
                             ArrayList<String> messageParts = message.splitMessageByEmoticonSymbols();
                             for (String part : messageParts) {
-                                System.out.println(part);
                                 if (part.equals(":)")) {
                                     ImageView happyImage = new ImageView("smile_happy.gif");
                                     textFlow.getChildren().add(happyImage);

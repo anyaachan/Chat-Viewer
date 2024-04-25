@@ -6,9 +6,10 @@
 -fx-background-color: transparent;
 }
 
-.theme-switch-button {
+.theme-switch-button, .help-button {
   -fx-background-color: transparent;
 }
 
-.theme-switch-button:selected {
+.theme-switch-button:selected, .help-button:selected {
+-fx-background-color: transparent;
 }
