@@ -2,14 +2,12 @@ package com.example.chatviewer;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
 import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
 import java.util.ArrayList;
 import java.util.Objects;
-import javafx.scene.control.ListCell;
+
 import javafx.scene.image.ImageView;
 import javafx.util.Callback;
 import javafx.scene.text.Text;
@@ -31,16 +29,41 @@ public class ChatViewerController {
     @FXML
     public void openMsgFile(ActionEvent event) {
         Conversation conversation = new Conversation();
-        String msgFilePath = fileImportManager.openMsgFile();
+        String msgFilePath = null;
+
+        // Try to open the file and get its path
+        try {
+            msgFilePath = fileImportManager.openMsgFile();
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error opening file. Please check if the file exists and is in .msg format.");
+            alert.setContentText(e.toString());
+
+            alert.showAndWait();
+        }
 
         // Get file name and set it to the label
         conversation.retrieveFileNameFromPath(msgFilePath);
         infoLabel.setText(conversation.getFileName());
 
-        // Set messages to the conversation
-        conversation.setMessages(fileImportManager.readMsgFile(msgFilePath));
-        // Replace consecutive nicknames with dots
-        conversation.replaceSameNicknamesWithDots();
+        // Get messages and set them to the conversation. Even if the msgObject is  empty, it will be handled in the next step.
+        ArrayList<Message> msgObjects = fileImportManager.readMsgFile(msgFilePath);
+        conversation.setMessages(msgObjects);
+
+        // Catch any error occuring due to the msg file having incorrect messages format inside
+        try {
+            conversation.replaceSameNicknamesWithDots();
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error reading file");
+            alert.setContentText("No messages found in the file or the messages are not formatted correctly. Please check the file and try again. " +
+                    "You can find an example of .msg files in the corresponding GitHub repository. " +
+                    "\n\n" + "Error: " + e.getMessage());
+
+            alert.showAndWait();
+        }
 
         // Convert ArrayList to ObservableList, as ListView requires ObservableList. ObservableList allows listeners to track changes when they occur.
         ObservableList<Message> observableMessages = FXCollections.observableArrayList(conversation.getMessages());
@@ -67,7 +90,7 @@ public class ChatViewerController {
                             String currentNickname = message.getNickname();
                             Text nameText = new Text();
                             if (currentNickname.equals(" ")) {
-                                nameText = new Text("");
+                                nameText = new Text(" ");
                             } else {
                                 nameText = new Text(currentNickname + ": ");
                             }
@@ -79,7 +102,6 @@ public class ChatViewerController {
                             TextFlow textFlow = new TextFlow(timestampText, nameText);
 
                             ArrayList<String> messageParts = message.splitMessageByEmoticonSymbols();
-                            System.out.println(messageParts);
                             for (String part : messageParts) {
                                 System.out.println(part);
                                 if (part.equals(":)")) {

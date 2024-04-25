@@ -13,7 +13,7 @@
     </padding>
    <children>
       <ListView fx:id="messageListView" prefHeight="377.0" prefWidth="369.0" style="-fx-background-color: #F5F5F5; -fx-background-radius: 20;" VBox.vgrow="ALWAYS" />
-      <Button fx:id="openButton" mnemonicParsing="false" onAction="#openMsgFile" prefHeight="60.0" prefWidth="117.0" style="-fx-background-radius: 20;" text="Open File" textAlignment="CENTER">
+      <Button fx:id="openButton" mnemonicParsing="false" onAction="#openMsgFile" prefHeight="60.0" prefWidth="117.0" style="-fx-background-radius: 20;" text="Open File" textAlignment="CENTER" VBox.vgrow="NEVER">
          <font>
             <Font size="16.0" />
          </font></Button>
