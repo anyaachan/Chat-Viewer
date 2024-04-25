@@ -27,30 +27,23 @@ public class ChatViewerController {
     private ListView<Message> messageListView;
     private FileImportManager fileImportManager = new FileImportManager();
 
-    public ArrayList<Message> replaceSameNicknamesWithDots(ArrayList<Message> messages){
-        String messageName = messages.get(0).getNickname();
-        for (int i = 0; i < messages.size(); i++) {
-            Message message = messages.get(i);
-            if ((Objects.equals(message.getNickname(), messageName)) && (i != 0)) {
-                message.setNickname(" ");
-            } else {
-                messageName = message.getNickname();
-            }
-        }
-        return messages;
-    }
 
     @FXML
     public void openMsgFile(ActionEvent event) {
+        Conversation conversation = new Conversation();
         String msgFilePath = fileImportManager.openMsgFile();
-        String[] msgFilePathArray = msgFilePath.split("/");
-        String msgFileName = msgFilePathArray[msgFilePathArray.length - 1];
-        infoLabel.setText(msgFileName);
 
-        ArrayList<Message> messages = fileImportManager.readMsgFile(msgFilePath);
-        messages = replaceSameNicknamesWithDots(messages);
+        // Get file name and set it to the label
+        conversation.retrieveFileNameFromPath(msgFilePath);
+        infoLabel.setText(conversation.getFileName());
+
+        // Set messages to the conversation
+        conversation.setMessages(fileImportManager.readMsgFile(msgFilePath));
+        // Replace consecutive nicknames with dots
+        conversation.replaceSameNicknamesWithDots();
+
         // Convert ArrayList to ObservableList, as ListView requires ObservableList. ObservableList allows listeners to track changes when they occur.
-        ObservableList<Message> observableMessages = FXCollections.observableArrayList(messages);
+        ObservableList<Message> observableMessages = FXCollections.observableArrayList(conversation.getMessages());
         messageListView.setItems(observableMessages); // Populate the list
 
         // Create a cell factory for messageListView to display messages in a custom way
@@ -69,8 +62,17 @@ public class ChatViewerController {
                             setGraphic(null);
                         } else {
                             Text timestampText = new Text("[" + message.getTimestamp() + "] ");
-                            Text nameText = new Text(message.getNickname() + ": ");
 
+                            // Check whether the nickname should display or not (better readability)
+                            String currentNickname = message.getNickname();
+                            Text nameText = new Text();
+                            if (currentNickname.equals(" ")) {
+                                nameText = new Text("");
+                            } else {
+                                nameText = new Text(currentNickname + ": ");
+                            }
+
+                            // Set styles as specified in ICA
                             timestampText.setStyle("-fx-fill: black;");
                             nameText.setStyle("-fx-fill: blue;");
 
@@ -93,13 +95,12 @@ public class ChatViewerController {
                                 }
                             }
 
-                            setGraphic(textFlow);  // Set the graphic of the cell to the styled TextFlow
+                            setGraphic(textFlow);  // Display textFlow in the cell
 
                         }
 
-                        setPrefWidth(0); // Use Pref Width 0 for "use compute size"
-                        setMaxWidth(Double.MAX_VALUE); // Allow cell to grow horizontally
-                        setPrefWidth(1); // Use Pref Width 1 for "grow as needed"
+                        setPrefWidth(0);
+                        setMaxWidth(Double.MAX_VALUE);
                     }
 
                 };
