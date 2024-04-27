@@ -9,13 +9,12 @@ import javafx.collections.FXCollections;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
 import javafx.geometry.Pos;
 
 import javafx.scene.layout.VBox;
-import javafx.scene.layout.HBox;
 
 import javafx.scene.image.Image;
-import javafx.scene.shape.SVGPath;
 
 import javafx.scene.image.ImageView;
 import javafx.util.Callback;
@@ -43,11 +42,11 @@ public class ChatViewerController {
         themeSwitchButton.getStyleClass().add("theme-switch-button");
         getHelpButton.getStyleClass().add("help-button");
 
-        setButtonImage("theme-switch.png", "question-mark.png");
+        setButtonImage("media/theme-switch-black.png", "media/question-mark-black.png");
     }
 
-    public void setButtonImage (String themeSwitchPath,
-                                            String helpButtonPath) {
+    public void setButtonImage(String themeSwitchPath,
+                               String helpButtonPath) {
         ImageView themeImageView = new ImageView(new Image(themeSwitchPath));
         themeImageView.setFitWidth(40);
         themeImageView.setFitHeight(40);
@@ -68,13 +67,13 @@ public class ChatViewerController {
         if (scene != null) {
             if (!darkModeEnabled) {
                 scene.getStylesheets().clear();
-                scene.getStylesheets().add("dark.css");
-                setButtonImage("theme-switch-white.png", "question-mark-white.png");
+                scene.getStylesheets().add("css/dark.css");
+                setButtonImage("media/theme-switch-white.png", "media/question-mark-white.png");
                 darkModeEnabled = true;
             } else {
                 scene.getStylesheets().clear();
-                scene.getStylesheets().add("style.css");
-                setButtonImage("theme-switch.png", "question-mark.png");
+                scene.getStylesheets().add("css/style.css");
+                setButtonImage("media/theme-switch-black.png", "media/question-mark-black.png");
                 darkModeEnabled = false;
             }
         }
@@ -181,30 +180,27 @@ public class ChatViewerController {
 
                             VBox vBox = new VBox();
                             vBox.setAlignment(Pos.CENTER_LEFT);  // Align children to the top-left
+                            TextFlow nameTextFlow = new TextFlow();
 
                             timestampText.getStyleClass().add("timestamp-text");
 
                             if (nameText != null) {
                                 nameText.getStyleClass().add("name-text");
-                                vBox.getChildren().add(nameText);
+                                nameTextFlow.getChildren().add(nameText);
                             }
 
-                            HBox hBox = new HBox();
-                            hBox.setAlignment(Pos.BOTTOM_LEFT);
-                            hBox.setMinHeight(24);
-                            hBox.getChildren().add(timestampText);
-
-                            TextFlow textFlow = new TextFlow(hBox);
-
+                            TextFlow textFlow = new TextFlow(timestampText);
                             ArrayList<String> messageParts = message.splitMessageByEmoticonSymbols();
                             for (String part : messageParts) {
                                 if (part.equals(":)")) {
-                                    ImageView happyImage = new ImageView("smile_happy.gif");
-                                    happyImage.setFitHeight(20);
+                                    ImageView happyImage = new ImageView("media/smile_happy.gif");
+                                    happyImage.setFitHeight(18);
+                                    happyImage.setFitWidth(18);
                                     textFlow.getChildren().add(happyImage);
                                 } else if (part.equals(":(")) {
-                                    ImageView sadImage = new ImageView("smile_sad.gif");
-                                    sadImage.setFitHeight(20);
+                                    ImageView sadImage = new ImageView("media/smile_sad.gif");
+                                    sadImage.setFitHeight(18);
+                                    sadImage.setFitWidth(18);
                                     textFlow.getChildren().add(sadImage);
                                 } else {
                                     Text messageTextPart = new Text(part);
@@ -212,9 +208,14 @@ public class ChatViewerController {
                                     textFlow.getChildren().add(messageTextPart);
                                 }
                             }
+
+//                            vBox.setStyle("-fx-border-color: black; -fx-border-width: 1;");
+//                            hBox.setStyle("-fx-border-color: red; -fx-border-width: 1;");
+//                            textFlow.setStyle("-fx-border-color: blue; -fx-border-width: 1;");
+                            vBox.getChildren().add(nameTextFlow);
                             vBox.getChildren().add(textFlow);
 
-                            setGraphic(vBox);  // Display textFlow in the cell
+                            setGraphic(vBox);
                         }
                         setPrefWidth(0);
                         setMaxWidth(Double.MAX_VALUE);

@@ -1,9 +1,6 @@
-.list-cell, .list-cell::focused {
-    -fx-border-radius: 20;
-}
-
 .list-cell {
--fx-background-color: transparent;
+    -fx-background-color: transparent;
+    -fx-font-size: 16px;
 }
 
 .theme-switch-button, .help-button {
@@ -22,12 +19,9 @@
     -fx-background-color: #1b234a !important;
 }
 
-.timestampText {
-    -fx-fill: #ffffff !important;
-}
 
 .infoLabel {
-    -fx-text-fill: #ffffff !important;
+    -fx-text-fill: rgb(255, 255, 255, 0.8);
 }
 
 .openButton {
@@ -47,7 +41,7 @@
 }
 
 .message-text {
-    -fx-fill: white;
+    -fx-fill: rgb(255, 255, 255, 0.8);
 }
 
 .timestamp-text {
