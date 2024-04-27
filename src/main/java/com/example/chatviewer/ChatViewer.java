@@ -4,7 +4,9 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCombination;
 import java.io.IOException;
 
 // Main code, the entry point of the application

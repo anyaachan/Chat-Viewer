@@ -13,3 +13,16 @@
 .theme-switch-button:selected, .help-button:selected {
 -fx-background-color: transparent;
 }
+
+.message-text {
+    -fx-fill: black;
+}
+
+.timestamp-text {
+    -fx-fill: rgb(0, 0, 0, 0.5);
+}
+
+.name-text {
+    -fx-fill: blue;
+    -fx-font-weight: bold;
+}

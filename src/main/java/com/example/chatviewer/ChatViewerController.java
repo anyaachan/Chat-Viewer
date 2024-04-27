@@ -2,12 +2,17 @@ package com.example.chatviewer;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import javafx.geometry.Pos;
+
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 
 import javafx.scene.image.Image;
 import javafx.scene.shape.SVGPath;
@@ -24,32 +29,84 @@ public class ChatViewerController {
     @FXML
     private Button openButton;
     @FXML
-    private Button themeSwitch;
+    private Button themeSwitchButton;
+    private boolean darkModeEnabled = false;
+
     @FXML
     private Button getHelpButton;
     @FXML
     private ListView<Message> messageListView;
     private FileImportManager fileImportManager = new FileImportManager();
 
-
     public void initialize() {
         openButton.setPickOnBounds(true);
+        themeSwitchButton.getStyleClass().add("theme-switch-button");
+        getHelpButton.getStyleClass().add("help-button");
 
-        ImageView themeImageView = new ImageView(new Image("theme-switch.png"));
+        setButtonImage("theme-switch.png", "question-mark.png");
+    }
+
+    public void setButtonImage (String themeSwitchPath,
+                                            String helpButtonPath) {
+        ImageView themeImageView = new ImageView(new Image(themeSwitchPath));
         themeImageView.setFitWidth(40);
         themeImageView.setFitHeight(40);
 
-        themeSwitch.setPickOnBounds(true);
-        themeSwitch.getStyleClass().add("theme-switch-button");
-        themeSwitch.setGraphic(themeImageView);
+        themeSwitchButton.setPickOnBounds(true);
+        themeSwitchButton.setGraphic(themeImageView);
 
-        ImageView getHelpImageView = new ImageView(new Image("question-mark.png"));
-        getHelpImageView.setFitWidth(40);
-        getHelpImageView.setFitHeight(40);
+        ImageView helpImageView = new ImageView(new Image(helpButtonPath));
+        helpImageView.setFitWidth(40);
+        helpImageView.setFitHeight(40);
 
         getHelpButton.setPickOnBounds(true);
-        getHelpButton.getStyleClass().add("help-button");
-        getHelpButton.setGraphic(getHelpImageView);
+        getHelpButton.setGraphic(helpImageView);
+    }
+
+    public void handleThemeToggle() {
+        Scene scene = themeSwitchButton.getScene();
+        if (scene != null) {
+            if (!darkModeEnabled) {
+                scene.getStylesheets().clear();
+                scene.getStylesheets().add("dark.css");
+                setButtonImage("theme-switch-white.png", "question-mark-white.png");
+                darkModeEnabled = true;
+            } else {
+                scene.getStylesheets().clear();
+                scene.getStylesheets().add("style.css");
+                setButtonImage("theme-switch.png", "question-mark.png");
+                darkModeEnabled = false;
+            }
+        }
+    }
+
+    @FXML
+    public void openHelpPopUp(ActionEvent event) throws IOException {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Help");
+        alert.setHeaderText("Chat Viewer Help");
+        alert.setContentText("Welcome to Chat Viewer!" +
+                "\n\n" +
+                "This application allows you to view chat messages from .msg files. " +
+                "To get started, click the Open button and select a .msg file. " +
+                "\n\n" +
+                "The messages should be separated by an empty line. The content of the messages should be formated as follows: " +
+                "\n\n" +
+                "Time: 12:00:00" +
+                "\n" +
+                "Name: John" +
+                "\n" +
+                "Message: Hello, how are you?" +
+                "\n\n" +
+                "You can switch between light and dark themes by clicking the theme switch button on the right. " +
+                "\n\n" +
+                "If you have any questions or need help, please contact me via GitHub: " +
+                "\n" +
+                "github.com/anyaachan" +
+                "\n\n" +
+                "Enjoy using Chat Viewer!");
+
+        alert.showAndWait();
     }
 
     @FXML
@@ -117,36 +174,48 @@ public class ChatViewerController {
                             String currentNickname = message.getNickname();
                             Text nameText = new Text();
                             if (currentNickname.equals(" ")) {
-                                nameText = new Text(" ");
+                                nameText = null;
                             } else {
-                                nameText = new Text(currentNickname + ": ");
+                                nameText = new Text(currentNickname);
                             }
 
-                            // Set styles as specified in ICA
-                            timestampText.setStyle("-fx-fill: black;");
-                            nameText.setStyle("-fx-fill: blue;");
+                            VBox vBox = new VBox();
+                            vBox.setAlignment(Pos.CENTER_LEFT);  // Align children to the top-left
 
-                            TextFlow textFlow = new TextFlow(timestampText, nameText);
+                            timestampText.getStyleClass().add("timestamp-text");
+
+                            if (nameText != null) {
+                                nameText.getStyleClass().add("name-text");
+                                vBox.getChildren().add(nameText);
+                            }
+
+                            HBox hBox = new HBox();
+                            hBox.setAlignment(Pos.BOTTOM_LEFT);
+                            hBox.setMinHeight(24);
+                            hBox.getChildren().add(timestampText);
+
+                            TextFlow textFlow = new TextFlow(hBox);
 
                             ArrayList<String> messageParts = message.splitMessageByEmoticonSymbols();
                             for (String part : messageParts) {
                                 if (part.equals(":)")) {
                                     ImageView happyImage = new ImageView("smile_happy.gif");
+                                    happyImage.setFitHeight(20);
                                     textFlow.getChildren().add(happyImage);
                                 } else if (part.equals(":(")) {
                                     ImageView sadImage = new ImageView("smile_sad.gif");
+                                    sadImage.setFitHeight(20);
                                     textFlow.getChildren().add(sadImage);
                                 } else {
                                     Text messageTextPart = new Text(part);
-                                    messageTextPart.setStyle("-fx-fill: black; -fx-font-weight: bold;");
+                                    messageTextPart.getStyleClass().add("message-text");
                                     textFlow.getChildren().add(messageTextPart);
                                 }
                             }
+                            vBox.getChildren().add(textFlow);
 
-                            setGraphic(textFlow);  // Display textFlow in the cell
-
+                            setGraphic(vBox);  // Display textFlow in the cell
                         }
-
                         setPrefWidth(0);
                         setMaxWidth(Double.MAX_VALUE);
                     }

@@ -1,0 +1,60 @@
+.list-cell, .list-cell::focused {
+    -fx-border-radius: 20;
+}
+
+.list-cell {
+-fx-background-color: transparent;
+}
+
+.theme-switch-button, .help-button {
+  -fx-background-color: transparent;
+}
+
+.theme-switch-button:selected, .help-button:selected {
+    -fx-background-color: transparent;
+}
+
+.mainVBox {
+    -fx-background-color: #151b35 !important;
+    }
+
+.messageListView {
+    -fx-background-color: #1b234a !important;
+}
+
+.timestampText {
+    -fx-fill: #ffffff !important;
+}
+
+.infoLabel {
+    -fx-text-fill: #ffffff !important;
+}
+
+.openButton {
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-background-color: linear-gradient(to top, #1b234a, #222c5d);
+    -fx-text-fill: #ffffff !important;
+    -fx-border-color: #0d1125 !important;
+}
+
+.openButton:hover {
+    -fx-background-color: #31385c !important;
+}
+
+.openButton:pressed {
+    -fx-background-color: #181f42 !important;
+}
+
+.message-text {
+    -fx-fill: white;
+}
+
+.timestamp-text {
+    -fx-fill: rgb(255, 255, 255, 0.5);
+}
+
+.name-text {
+    -fx-fill: orange;
+    -fx-font-weight: bold;
+}
