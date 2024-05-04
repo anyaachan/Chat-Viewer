@@ -1,6 +1,5 @@
 .list-cell {
     -fx-background-color: transparent;
-    -fx-font-size: 16px;
 }
 
 .theme-switch-button, .help-button {
@@ -21,7 +20,7 @@
 
 
 .infoLabel {
-    -fx-text-fill: rgb(255, 255, 255, 0.8);
+    -fx-text-fill: rgb(255, 255, 255, 0.9);
 }
 
 .openButton {
@@ -41,7 +40,7 @@
 }
 
 .message-text {
-    -fx-fill: rgb(255, 255, 255, 0.8);
+    -fx-fill: rgb(255, 255, 255, 0.9);
 }
 
 .timestamp-text {
@@ -51,4 +50,33 @@
 .name-text {
     -fx-fill: orange;
     -fx-font-weight: bold;
+}
+
+.messageListView .scroll-bar {
+    -fx-background-color: transparent;
+    -fx-background-radius: 10;
+}
+
+.messageListView .scroll-bar:vertical {
+    -fx-padding: 0 5px 0 0;
+    -fx-pref-width: 15px;
+}
+
+.messageListView .thumb {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-background-radius: 8;
+}
+
+.messageListView .thumb:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.3);
+}
+
+.messageListView .increment-button,
+.messageListView .decrement-button {
+    -fx-background-color: transparent;
+}
+
+.messageListView .increment-arrow,
+.messageListView .decrement-arrow {
+    -fx-shape: " ";
 }

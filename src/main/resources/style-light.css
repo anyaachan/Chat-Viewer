@@ -1,0 +1,53 @@
+.list-cell {
+    -fx-background-color: transparent;
+}
+
+.theme-switch-button, .help-button {
+  -fx-background-color: transparent;
+}
+
+.theme-switch-button:selected, .help-button:selected {
+-fx-background-color: transparent;
+}
+
+.message-text {
+    -fx-fill: black;
+}
+
+.timestamp-text {
+    -fx-fill: rgb(0, 0, 0, 0.5);
+}
+
+.name-text {
+    -fx-fill: blue;
+    -fx-font-weight: bold;
+}
+
+.messageListView .scroll-bar {
+    -fx-background-color: transparent;
+    -fx-background-radius: 10;
+}
+
+.messageListView .scroll-bar:vertical {
+    -fx-padding: 0 5px 0 0;
+    -fx-pref-width: 15px;
+}
+
+.messageListView .thumb {
+    -fx-background-color: rgba(0, 0, 0, 0.2);
+    -fx-background-radius: 8;
+}
+
+.messageListView .thumb:hover {
+    -fx-background-color: rgba(0, 0, 0, 0.3);
+}
+
+.messageListView .increment-button,
+.messageListView .decrement-button {
+    -fx-background-color: transparent;
+}
+
+.messageListView .increment-arrow,
+.messageListView .decrement-arrow {
+    -fx-shape: " ";
+}

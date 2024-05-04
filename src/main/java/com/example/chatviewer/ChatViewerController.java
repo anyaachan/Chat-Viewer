@@ -9,7 +9,6 @@ import javafx.collections.FXCollections;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
 import javafx.geometry.Pos;
 
 import javafx.scene.layout.VBox;
@@ -42,11 +41,12 @@ public class ChatViewerController {
         themeSwitchButton.getStyleClass().add("theme-switch-button");
         getHelpButton.getStyleClass().add("help-button");
 
-        setButtonImage("media/theme-switch-black.png", "media/question-mark-black.png");
+        setButtonImage("theme-switch-black.png", "question-mark-black.png");
     }
 
-    public void setButtonImage(String themeSwitchPath,
-                               String helpButtonPath) {
+
+    public void setButtonImage (String themeSwitchPath,
+                                            String helpButtonPath) {
         ImageView themeImageView = new ImageView(new Image(themeSwitchPath));
         themeImageView.setFitWidth(40);
         themeImageView.setFitHeight(40);
@@ -67,13 +67,13 @@ public class ChatViewerController {
         if (scene != null) {
             if (!darkModeEnabled) {
                 scene.getStylesheets().clear();
-                scene.getStylesheets().add("css/dark.css");
-                setButtonImage("media/theme-switch-white.png", "media/question-mark-white.png");
+                scene.getStylesheets().add("style-dark.css");
+                setButtonImage("theme-switch-white.png", "question-mark-white.png");
                 darkModeEnabled = true;
             } else {
                 scene.getStylesheets().clear();
-                scene.getStylesheets().add("css/style.css");
-                setButtonImage("media/theme-switch-black.png", "media/question-mark-black.png");
+                scene.getStylesheets().add("style-light.css");
+                setButtonImage("theme-switch-black.png", "question-mark-black.png");
                 darkModeEnabled = false;
             }
         }
@@ -193,14 +193,10 @@ public class ChatViewerController {
                             ArrayList<String> messageParts = message.splitMessageByEmoticonSymbols();
                             for (String part : messageParts) {
                                 if (part.equals(":)")) {
-                                    ImageView happyImage = new ImageView("media/smile_happy.gif");
-                                    happyImage.setFitHeight(18);
-                                    happyImage.setFitWidth(18);
+                                    ImageView happyImage = new ImageView("smile_happy.gif");
                                     textFlow.getChildren().add(happyImage);
                                 } else if (part.equals(":(")) {
-                                    ImageView sadImage = new ImageView("media/smile_sad.gif");
-                                    sadImage.setFitHeight(18);
-                                    sadImage.setFitWidth(18);
+                                    ImageView sadImage = new ImageView("smile_sad.gif");
                                     textFlow.getChildren().add(sadImage);
                                 } else {
                                     Text messageTextPart = new Text(part);

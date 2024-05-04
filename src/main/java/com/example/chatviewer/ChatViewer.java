@@ -18,7 +18,7 @@ public class ChatViewer extends Application {
         stage.show();
         stage.setMinHeight(500);
         stage.setMinWidth(410);
-        scene.getStylesheets().add("css/style.css");
+        scene.getStylesheets().add("style-light.css");
     }
 
     public static void main(String[] args) {
