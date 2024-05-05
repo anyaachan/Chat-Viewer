@@ -52,8 +52,7 @@ public class Message {
         return parts;
     }
 
-    public TextFlow createMessageFlow() {
-        TextFlow textFlow = new TextFlow();
+    public void createMessageFlow(TextFlow textFlow) {
         ArrayList<String> messageParts = this.splitMessageByEmoticonSymbols();
         for (String part : messageParts) {
             if (part.equals(":)")) {
@@ -72,6 +71,5 @@ public class Message {
                 textFlow.getChildren().add(messageTextPart);
             }
         }
-        return textFlow;
     }
 }

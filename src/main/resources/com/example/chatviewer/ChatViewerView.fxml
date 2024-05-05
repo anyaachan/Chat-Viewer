@@ -29,7 +29,7 @@
          </children>
       </GridPane>
       <ListView fx:id="messageListView" minHeight="-Infinity" prefHeight="320.0" prefWidth="468.0" style="-fx-background-radius: 15;" styleClass="messageListView" VBox.vgrow="ALWAYS" />
-      <Button fx:id="openButton" mnemonicParsing="false" onAction="#openMsgFile" prefHeight="43.0" prefWidth="106.0" style="-fx-background-radius: 20;" styleClass="openButton" text="Open File" textAlignment="CENTER">
+      <Button fx:id="openButton" mnemonicParsing="false" onAction="#loadMsgFile" prefHeight="43.0" prefWidth="106.0" style="-fx-background-radius: 20;" styleClass="openButton" text="Open File" textAlignment="CENTER">
          <font>
             <Font size="16.0" />
          </font>

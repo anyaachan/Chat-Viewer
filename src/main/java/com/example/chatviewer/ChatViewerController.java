@@ -8,8 +8,6 @@ import javafx.collections.ObservableList;
 
 import javafx.fxml.FXML;
 
-import javafx.event.ActionEvent;
-
 import javafx.geometry.Pos;
 
 import javafx.scene.control.*;
@@ -40,12 +38,12 @@ public class ChatViewerController {
     }
 
     @FXML
-    public void openHelpPopUp(ActionEvent event) throws IOException {
+    public void openHelpPopUp() throws IOException {
         uiUtils.openHelpPopUp();
     }
 
     @FXML
-    public void handleThemeToggle(ActionEvent event) {
+    public void handleThemeToggle() {
         uiUtils.handleThemeToggle(themeSwitchButton, getHelpButton);
     }
 
@@ -58,6 +56,43 @@ public class ChatViewerController {
         alert.setContentText(alertText);
 
         alert.showAndWait();
+    }
+
+    public String OpenFileDialog() {
+        String msgFilePath = null;
+
+        // Try to open the file and get its path
+        try {
+            msgFilePath = fileImportManager.openMsgFile();
+        } catch (Exception e) {
+            displayErrorAlert("Error",
+                    "Error opening file",
+                    "An error occurred while opening the file. Check if the file exist and in .msg format and try again. " +
+                            "\n\n" + "Error: " + e.getMessage());
+        }
+        return msgFilePath;
+    }
+
+    public VBox createMessageVBox(Message message) {
+        Text timestampText = new Text("[" + message.getTimestamp() + "]  ");
+
+        Text nameText = message.getNickname().equals(" ") ? null : new Text(message.getNickname());
+        TextFlow nameTextFlow = new TextFlow();
+
+        timestampText.getStyleClass().add("timestamp-text");
+
+        if (nameText != null) {
+            nameText.getStyleClass().add("name-text");
+            nameTextFlow.getChildren().add(nameText);
+        }
+
+        TextFlow textFlow = new TextFlow(timestampText);
+        message.createMessageFlow(textFlow);
+
+        VBox vBox = new VBox(nameTextFlow, textFlow);
+        vBox.setAlignment(Pos.CENTER_LEFT);  // Align children to the top-left
+
+        return vBox;
     }
 
     public void updateListCell() {
@@ -76,23 +111,7 @@ public class ChatViewerController {
                             setText(null);
                             setGraphic(null);
                         } else {
-                            Text timestampText = new Text("[" + message.getTimestamp() + "]  ");
-
-                            Text nameText = message.getNickname().equals(" ") ? null : new Text(message.getNickname());
-                            TextFlow nameTextFlow = new TextFlow();
-
-                            timestampText.getStyleClass().add("timestamp-text");
-
-                            if (nameText != null) {
-                                nameText.getStyleClass().add("name-text");
-                                nameTextFlow.getChildren().add(nameText);
-                            }
-
-                            TextFlow textFlow = new TextFlow(timestampText, message.createMessageFlow());
-
-                            VBox vBox = new VBox(nameTextFlow, textFlow);
-                            vBox.setAlignment(Pos.CENTER_LEFT);  // Align children to the top-left
-
+                            VBox vBox = createMessageVBox(message);
                             setGraphic(vBox);
                         }
                         setPrefWidth(0);
@@ -103,23 +122,8 @@ public class ChatViewerController {
         });
     }
 
-    public String OpenFileDialog() {
-        String msgFilePath = null;
-
-        // Try to open the file and get its path
-        try {
-            msgFilePath = fileImportManager.openMsgFile();
-        } catch (Exception e) {
-            displayErrorAlert("Error",
-                    "Error opening file",
-                    "An error occurred while opening the file. Check if the file exist and in .msg format and try again. " +
-                            "\n\n" + "Error: " + e.getMessage());
-        }
-        return msgFilePath;
-    }
-
     @FXML
-    public void openMsgFile(ActionEvent event) throws IOException {
+    public void loadMsgFile() throws IOException {
         Conversation conversation = new Conversation();
         String msgFilePath = OpenFileDialog();
 
