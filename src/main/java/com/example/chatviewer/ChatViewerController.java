@@ -2,7 +2,6 @@ package com.example.chatviewer;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
@@ -28,84 +27,26 @@ public class ChatViewerController {
     private Button openButton;
     @FXML
     private Button themeSwitchButton;
-    private boolean darkModeEnabled = false;
-
     @FXML
     private Button getHelpButton;
     @FXML
     private ListView<Message> messageListView;
     private FileImportManager fileImportManager = new FileImportManager();
+    private UIUtils uiUtils = new UIUtils();
 
     public void initialize() {
-        openButton.setPickOnBounds(true);
-        themeSwitchButton.getStyleClass().add("theme-switch-button");
-        getHelpButton.getStyleClass().add("help-button");
-
-        setButtonImage("theme-switch-black.png", "question-mark-black.png");
-    }
-
-
-    public void setButtonImage (String themeSwitchPath,
-                                            String helpButtonPath) {
-        ImageView themeImageView = new ImageView(new Image(themeSwitchPath));
-        themeImageView.setFitWidth(40);
-        themeImageView.setFitHeight(40);
-
-        themeSwitchButton.setPickOnBounds(true);
-        themeSwitchButton.setGraphic(themeImageView);
-
-        ImageView helpImageView = new ImageView(new Image(helpButtonPath));
-        helpImageView.setFitWidth(40);
-        helpImageView.setFitHeight(40);
-
-        getHelpButton.setPickOnBounds(true);
-        getHelpButton.setGraphic(helpImageView);
-    }
-
-    public void handleThemeToggle() {
-        Scene scene = themeSwitchButton.getScene();
-        if (scene != null) {
-            if (!darkModeEnabled) {
-                scene.getStylesheets().clear();
-                scene.getStylesheets().add("style-dark.css");
-                setButtonImage("theme-switch-white.png", "question-mark-white.png");
-                darkModeEnabled = true;
-            } else {
-                scene.getStylesheets().clear();
-                scene.getStylesheets().add("style-light.css");
-                setButtonImage("theme-switch-black.png", "question-mark-black.png");
-                darkModeEnabled = false;
-            }
-        }
+        uiUtils.setButtonImage("theme-switch-black.png", themeSwitchButton);
+        uiUtils.setButtonImage("question-mark-black.png", getHelpButton);
     }
 
     @FXML
     public void openHelpPopUp(ActionEvent event) throws IOException {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Help");
-        alert.setHeaderText("Chat Viewer Help");
-        alert.setContentText("Welcome to Chat Viewer!" +
-                "\n\n" +
-                "This application allows you to view chat messages from .msg files. " +
-                "To get started, click the Open button and select a .msg file. " +
-                "\n\n" +
-                "The messages should be separated by an empty line. The content of the messages should be formated as follows: " +
-                "\n\n" +
-                "Time: 12:00:00" +
-                "\n" +
-                "Name: John" +
-                "\n" +
-                "Message: Hello, how are you?" +
-                "\n\n" +
-                "You can switch between light and dark themes by clicking the theme switch button on the right. " +
-                "\n\n" +
-                "If you have any questions or need help, please contact me via GitHub: " +
-                "\n" +
-                "github.com/anyaachan" +
-                "\n\n" +
-                "Enjoy using Chat Viewer!");
+        uiUtils.openHelpPopUp();
+    }
 
-        alert.showAndWait();
+    @FXML
+    public void handleThemeToggle(ActionEvent event) {
+        uiUtils.handleThemeToggle(themeSwitchButton, getHelpButton);
     }
 
     @FXML
@@ -167,7 +108,7 @@ public class ChatViewerController {
                             setText(null);
                             setGraphic(null);
                         } else {
-                            Text timestampText = new Text("[" + message.getTimestamp() + "] ");
+                            Text timestampText = new Text("[" + message.getTimestamp() + "]  ");
 
                             // Check whether the nickname should display or not (better readability)
                             String currentNickname = message.getNickname();
@@ -194,9 +135,13 @@ public class ChatViewerController {
                             for (String part : messageParts) {
                                 if (part.equals(":)")) {
                                     ImageView happyImage = new ImageView("smile_happy.gif");
+                                    happyImage.setFitHeight(20);
+                                    happyImage.setFitWidth(20);
                                     textFlow.getChildren().add(happyImage);
                                 } else if (part.equals(":(")) {
                                     ImageView sadImage = new ImageView("smile_sad.gif");
+                                    sadImage.setFitHeight(20);
+                                    sadImage.setFitWidth(20);
                                     textFlow.getChildren().add(sadImage);
                                 } else {
                                     Text messageTextPart = new Text(part);
@@ -204,7 +149,6 @@ public class ChatViewerController {
                                     textFlow.getChildren().add(messageTextPart);
                                 }
                             }
-
 //                            vBox.setStyle("-fx-border-color: black; -fx-border-width: 1;");
 //                            hBox.setStyle("-fx-border-color: red; -fx-border-width: 1;");
 //                            textFlow.setStyle("-fx-border-color: blue; -fx-border-width: 1;");

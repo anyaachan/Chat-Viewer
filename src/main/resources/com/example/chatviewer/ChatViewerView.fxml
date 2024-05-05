@@ -24,8 +24,8 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button fx:id="themeSwitchButton" alignment="CENTER" mnemonicParsing="false" onAction="#handleThemeToggle" prefHeight="30.0" prefWidth="35.0" style="-fx-background-radius: 20;" text="" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" />
-            <Button fx:id="getHelpButton" alignment="CENTER" mnemonicParsing="false" onAction="#openHelpPopUp" prefHeight="30.0" prefWidth="33.0" style="-fx-background-radius: 20;" text="" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" />
+            <Button fx:id="themeSwitchButton" styleClass = "theme-switch-button" alignment="CENTER" mnemonicParsing="false" onAction="#handleThemeToggle" prefHeight="30.0" prefWidth="35.0" style="-fx-background-radius: 20;" text="" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" />
+            <Button fx:id="getHelpButton" styleClass="help-button" alignment="CENTER" mnemonicParsing="false" onAction="#openHelpPopUp" prefHeight="30.0" prefWidth="33.0" style="-fx-background-radius: 20;" text="" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" />
          </children>
       </GridPane>
       <ListView fx:id="messageListView" minHeight="-Infinity" prefHeight="320.0" prefWidth="468.0" style="-fx-background-radius: 15;" styleClass="messageListView" VBox.vgrow="ALWAYS" />
