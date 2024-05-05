@@ -1,23 +1,23 @@
 package com.example.chatviewer;
 
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.collections.ObservableList;
-import javafx.collections.FXCollections;
-
 import java.io.IOException;
 import java.util.ArrayList;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import javafx.fxml.FXML;
+
+import javafx.event.ActionEvent;
+
 import javafx.geometry.Pos;
 
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
-
-import javafx.scene.image.Image;
-
-import javafx.scene.image.ImageView;
-import javafx.util.Callback;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+
+import javafx.util.Callback;
 
 // Class which will be connected to our graphical interface
 public class ChatViewerController {
@@ -49,50 +49,18 @@ public class ChatViewerController {
         uiUtils.handleThemeToggle(themeSwitchButton, getHelpButton);
     }
 
-    @FXML
-    public void openMsgFile(ActionEvent event) throws IOException {
-        Conversation conversation = new Conversation();
-        String msgFilePath = null;
+    public void displayErrorAlert(String alertTitle,
+                                  String alertHeader,
+                                  String alertText) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(alertTitle);
+        alert.setHeaderText(alertHeader);
+        alert.setContentText(alertText);
 
-        // Try to open the file and get its path
-        try {
-            msgFilePath = fileImportManager.openMsgFile();
-        } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Error opening file. Please check if the file exists and is in .msg format.");
-            alert.setContentText(e.toString());
+        alert.showAndWait();
+    }
 
-            alert.showAndWait();
-        }
-
-        // Get file name and set it to the label
-        conversation.retrieveFileNameFromPath(msgFilePath);
-        infoLabel.setText(conversation.getFileName());
-
-        // Get messages and set them to the conversation. Even if the msgObject is  empty, it will be handled in the next step.
-        ArrayList<Message> msgObjects = fileImportManager.readMsgFile(msgFilePath);
-        System.out.println(msgObjects.size());
-
-        // Catch any error occuring due to the msg file having incorrect messages format inside
-        try {
-            conversation.setMessages(msgObjects);
-            conversation.replaceSameNicknamesWithDots();
-        } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Error reading file");
-            alert.setContentText("No messages found in the file or the messages are not formatted correctly. Please check the file and try again. " +
-                    "You can find an example of .msg files in the corresponding GitHub repository. " +
-                    "\n\n" + "Error: " + e.getMessage());
-
-            alert.showAndWait();
-        }
-
-        // Convert ArrayList to ObservableList, as ListView requires ObservableList. ObservableList allows listeners to track changes when they occur.
-        ObservableList<Message> observableMessages = FXCollections.observableArrayList(conversation.getMessages());
-        messageListView.setItems(observableMessages); // Populate the list
-
+    public void updateListCell() {
         // Create a cell factory for messageListView to display messages in a custom way
         // Callback is a method that is passed as an argument and is called when a specific event occurs
         // Input type is ListView<Message> (to explain to which list the cell belongs to) and output type is ListCell<Message>
@@ -110,17 +78,7 @@ public class ChatViewerController {
                         } else {
                             Text timestampText = new Text("[" + message.getTimestamp() + "]  ");
 
-                            // Check whether the nickname should display or not (better readability)
-                            String currentNickname = message.getNickname();
-                            Text nameText = new Text();
-                            if (currentNickname.equals(" ")) {
-                                nameText = null;
-                            } else {
-                                nameText = new Text(currentNickname);
-                            }
-
-                            VBox vBox = new VBox();
-                            vBox.setAlignment(Pos.CENTER_LEFT);  // Align children to the top-left
+                            Text nameText = message.getNickname().equals(" ") ? null : new Text(message.getNickname());
                             TextFlow nameTextFlow = new TextFlow();
 
                             timestampText.getStyleClass().add("timestamp-text");
@@ -130,30 +88,10 @@ public class ChatViewerController {
                                 nameTextFlow.getChildren().add(nameText);
                             }
 
-                            TextFlow textFlow = new TextFlow(timestampText);
-                            ArrayList<String> messageParts = message.splitMessageByEmoticonSymbols();
-                            for (String part : messageParts) {
-                                if (part.equals(":)")) {
-                                    ImageView happyImage = new ImageView("smile_happy.gif");
-                                    happyImage.setFitHeight(20);
-                                    happyImage.setFitWidth(20);
-                                    textFlow.getChildren().add(happyImage);
-                                } else if (part.equals(":(")) {
-                                    ImageView sadImage = new ImageView("smile_sad.gif");
-                                    sadImage.setFitHeight(20);
-                                    sadImage.setFitWidth(20);
-                                    textFlow.getChildren().add(sadImage);
-                                } else {
-                                    Text messageTextPart = new Text(part);
-                                    messageTextPart.getStyleClass().add("message-text");
-                                    textFlow.getChildren().add(messageTextPart);
-                                }
-                            }
-//                            vBox.setStyle("-fx-border-color: black; -fx-border-width: 1;");
-//                            hBox.setStyle("-fx-border-color: red; -fx-border-width: 1;");
-//                            textFlow.setStyle("-fx-border-color: blue; -fx-border-width: 1;");
-                            vBox.getChildren().add(nameTextFlow);
-                            vBox.getChildren().add(textFlow);
+                            TextFlow textFlow = new TextFlow(timestampText, message.createMessageFlow());
+
+                            VBox vBox = new VBox(nameTextFlow, textFlow);
+                            vBox.setAlignment(Pos.CENTER_LEFT);  // Align children to the top-left
 
                             setGraphic(vBox);
                         }
@@ -163,6 +101,52 @@ public class ChatViewerController {
                 };
             }
         });
+    }
+
+    public String OpenFileDialog() {
+        String msgFilePath = null;
+
+        // Try to open the file and get its path
+        try {
+            msgFilePath = fileImportManager.openMsgFile();
+        } catch (Exception e) {
+            displayErrorAlert("Error",
+                    "Error opening file",
+                    "An error occurred while opening the file. Check if the file exist and in .msg format and try again. " +
+                            "\n\n" + "Error: " + e.getMessage());
+        }
+        return msgFilePath;
+    }
+
+    @FXML
+    public void openMsgFile(ActionEvent event) throws IOException {
+        Conversation conversation = new Conversation();
+        String msgFilePath = OpenFileDialog();
+
+        // Get file name and set it to the label
+        conversation.retrieveFileNameFromPath(msgFilePath);
+        infoLabel.setText(conversation.getFileName());
+
+        // Get messages and set them to the conversation. Even if the msgObject is  empty, it will be handled in the next step.
+        ArrayList<Message> msgObjects = fileImportManager.readMsgFile(msgFilePath);
+
+        try {
+            conversation.setMessages(msgObjects);
+            conversation.replaceSameNicknamesWithDots();
+            // Catch any error occuring due to the msg file having incorrect messages format inside
+        } catch (Exception e) {
+            displayErrorAlert("Error",
+                    "Error reading file",
+                    "No messages found in the file or the messages are not formatted correctly. Please check the file and try again. " +
+                            "You can find an example of .msg files in the corresponding GitHub repository. " +
+                            "\n\n" + "Error: " + e.getMessage());
+        }
+
+        // Convert ArrayList to ObservableList, as ListView requires ObservableList. ObservableList allows listeners to track changes when they occur.
+        ObservableList<Message> observableMessages = FXCollections.observableArrayList(conversation.getMessages());
+        messageListView.setItems(observableMessages); // Populate the list
+
+        updateListCell();
     }
 }
 

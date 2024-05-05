@@ -7,11 +7,11 @@ public class Conversation {
     private ArrayList<Message> messages;
     private String fileName;
 
-    public void setMessages (ArrayList<Message> messages) {
+    public void setMessages(ArrayList<Message> messages) {
         this.messages = messages;
     }
 
-    public void setFileName (String fileName) {
+    public void setFileName(String fileName) {
         this.fileName = fileName;
     }
 
@@ -23,7 +23,7 @@ public class Conversation {
         return fileName;
     }
 
-    public void replaceSameNicknamesWithDots(){
+    public void replaceSameNicknamesWithDots() {
         String messageName = messages.get(0).getNickname();
         for (int i = 0; i < messages.size(); i++) {
             Message message = messages.get(i);
@@ -35,9 +35,8 @@ public class Conversation {
         }
     }
 
-    public void retrieveFileNameFromPath (String path) {
+    public void retrieveFileNameFromPath(String path) {
         String[] msgFilePathArray = path.split("/");
-        String msgFileName = msgFilePathArray[msgFilePathArray.length - 1];
-        setFileName(msgFileName);
+        fileName = msgFilePathArray[msgFilePathArray.length - 1];
     }
 }

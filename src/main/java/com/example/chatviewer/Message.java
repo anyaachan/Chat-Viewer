@@ -1,5 +1,9 @@
 package com.example.chatviewer;
 
+import javafx.scene.image.ImageView;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
+
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -46,5 +50,28 @@ public class Message {
         }
 
         return parts;
+    }
+
+    public TextFlow createMessageFlow() {
+        TextFlow textFlow = new TextFlow();
+        ArrayList<String> messageParts = this.splitMessageByEmoticonSymbols();
+        for (String part : messageParts) {
+            if (part.equals(":)")) {
+                ImageView happyImage = new ImageView("smile_happy.gif");
+                happyImage.setFitHeight(20);
+                happyImage.setFitWidth(20);
+                textFlow.getChildren().add(happyImage);
+            } else if (part.equals(":(")) {
+                ImageView sadImage = new ImageView("smile_sad.gif");
+                sadImage.setFitHeight(20);
+                sadImage.setFitWidth(20);
+                textFlow.getChildren().add(sadImage);
+            } else {
+                Text messageTextPart = new Text(part);
+                messageTextPart.getStyleClass().add("message-text");
+                textFlow.getChildren().add(messageTextPart);
+            }
+        }
+        return textFlow;
     }
 }
