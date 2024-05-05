@@ -8,4 +8,6 @@ module com.example.chatviewer {
 
     opens com.example.chatviewer to javafx.fxml;
     exports com.example.chatviewer;
+    exports com.example.chatviewer.data;
+    opens com.example.chatviewer.data to javafx.fxml;
 }

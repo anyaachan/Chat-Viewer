@@ -1,4 +1,4 @@
-package com.example.chatviewer;
+package com.example.chatviewer.data;
 
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
@@ -50,26 +50,5 @@ public class Message {
         }
 
         return parts;
-    }
-
-    public void createMessageFlow(TextFlow textFlow) {
-        ArrayList<String> messageParts = this.splitMessageByEmoticonSymbols();
-        for (String part : messageParts) {
-            if (part.equals(":)")) {
-                ImageView happyImage = new ImageView("smile_happy.gif");
-                happyImage.setFitHeight(20);
-                happyImage.setFitWidth(20);
-                textFlow.getChildren().add(happyImage);
-            } else if (part.equals(":(")) {
-                ImageView sadImage = new ImageView("smile_sad.gif");
-                sadImage.setFitHeight(20);
-                sadImage.setFitWidth(20);
-                textFlow.getChildren().add(sadImage);
-            } else {
-                Text messageTextPart = new Text(part);
-                messageTextPart.getStyleClass().add("message-text");
-                textFlow.getChildren().add(messageTextPart);
-            }
-        }
     }
 }

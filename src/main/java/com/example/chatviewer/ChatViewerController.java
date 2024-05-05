@@ -3,17 +3,16 @@ package com.example.chatviewer;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import com.example.chatviewer.data.Conversation;
+import com.example.chatviewer.data.Message;
+import com.example.chatviewer.ui.MessageBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import javafx.fxml.FXML;
 
-import javafx.geometry.Pos;
-
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 
 import javafx.util.Callback;
 
@@ -73,28 +72,6 @@ public class ChatViewerController {
         return msgFilePath;
     }
 
-    public VBox createMessageVBox(Message message) {
-        Text timestampText = new Text("[" + message.getTimestamp() + "]  ");
-
-        Text nameText = message.getNickname().equals(" ") ? null : new Text(message.getNickname());
-        TextFlow nameTextFlow = new TextFlow();
-
-        timestampText.getStyleClass().add("timestamp-text");
-
-        if (nameText != null) {
-            nameText.getStyleClass().add("name-text");
-            nameTextFlow.getChildren().add(nameText);
-        }
-
-        TextFlow textFlow = new TextFlow(timestampText);
-        message.createMessageFlow(textFlow);
-
-        VBox vBox = new VBox(nameTextFlow, textFlow);
-        vBox.setAlignment(Pos.CENTER_LEFT);  // Align children to the top-left
-
-        return vBox;
-    }
-
     public void updateListCell() {
         // Create a cell factory for messageListView to display messages in a custom way
         // Callback is a method that is passed as an argument and is called when a specific event occurs
@@ -111,7 +88,7 @@ public class ChatViewerController {
                             setText(null);
                             setGraphic(null);
                         } else {
-                            VBox vBox = createMessageVBox(message);
+                            VBox vBox = new MessageBox(message);
                             setGraphic(vBox);
                         }
                         setPrefWidth(0);

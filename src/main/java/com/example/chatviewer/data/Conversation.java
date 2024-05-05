@@ -1,4 +1,4 @@
-package com.example.chatviewer;
+package com.example.chatviewer.data;
 
 import java.util.ArrayList;
 import java.util.Objects;

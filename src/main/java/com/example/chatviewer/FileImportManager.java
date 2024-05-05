@@ -1,5 +1,6 @@
 package com.example.chatviewer;
 
+import com.example.chatviewer.data.Message;
 import javafx.stage.FileChooser;
 
 import java.io.File;
