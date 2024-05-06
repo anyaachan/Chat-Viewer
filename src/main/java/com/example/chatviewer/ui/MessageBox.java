@@ -9,11 +9,12 @@ import javafx.scene.text.TextFlow;
 
 import java.util.ArrayList;
 
+// Single message representation in VBox, will be used in ListView
 public class MessageBox extends VBox {
 
     public MessageBox(Message message) {
         super();
-        // Nickname
+        // Nickname, do not display if it is empty (when the message is from the same user as a previous one)
         Text nameText = message.getNickname().equals(" ") ? null : new Text(message.getNickname());
         TextFlow nameTextFlow = new TextFlow();
         if (nameText != null) {

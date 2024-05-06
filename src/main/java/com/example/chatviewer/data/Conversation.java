@@ -11,10 +11,6 @@ public class Conversation {
         this.messages = messages;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
     public ArrayList<Message> getMessages() {
         return messages;
     }
@@ -23,6 +19,8 @@ public class Conversation {
         return fileName;
     }
 
+    // If there are multiple messages from the same user in a row, replace the nickname with a space
+    // Better readability in the chat and design
     public void replaceSameNicknamesWithDots() {
         String messageName = messages.get(0).getNickname();
         for (int i = 0; i < messages.size(); i++) {
@@ -35,6 +33,7 @@ public class Conversation {
         }
     }
 
+    // File name will be displayed in the application
     public void retrieveFileNameFromPath(String path) {
         String[] msgFilePathArray = path.split("/");
         fileName = msgFilePathArray[msgFilePathArray.length - 1];

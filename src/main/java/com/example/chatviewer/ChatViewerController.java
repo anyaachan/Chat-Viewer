@@ -20,18 +20,17 @@ import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import java.util.ArrayList;
 
-// Class which will be connected to our graphical interface
 public class ChatViewerController {
     @FXML
     private Label infoLabel;
     @FXML
-    private Button openButton;
+    private Button openButton; // Opening file dialog
     @FXML
     private Button themeSwitchButton;
     @FXML
     private Button getHelpButton;
     @FXML
-    private ListView<Message> messageListView;
+    private ListView<Message> messageListView; // List of messages
     private FileImportManager fileImportManager = new FileImportManager();
     private boolean darkModeEnabled = false;
 
@@ -48,36 +47,51 @@ public class ChatViewerController {
     public void initialize() {
         setButtonImage("theme-switch-black.png", themeSwitchButton);
         setButtonImage("question-mark-black.png", getHelpButton);
+
+        // Customize the appearance of the cells in ListView with cell factory
+        messageListView.setCellFactory(new Callback<>() {
+            @Override
+            public ListCell<Message> call(ListView<Message> messageListView) {
+                // updateItem method overrides ListCell<Message> updateItem method, which is called when the cell needs to be updated
+                return new ListCell<Message>() {
+                    protected void updateItem(Message message, boolean empty) {
+                        super.updateItem(message, empty);
+
+                        if (empty || message == null) {
+                            setText(null);
+                            setGraphic(null);
+                        } else {
+                            VBox vBox = new MessageBox(message);
+                            setGraphic(vBox);
+                        }
+
+                        // Stop text from overflowing the application window
+                        setPrefWidth(0);
+                        setMaxWidth(Double.MAX_VALUE);
+                    }
+                };
+            }
+        });
     }
 
+    // Usage instructions, displayed when clicking the help button
     @FXML
     public void openHelpPopUp() throws IOException {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Help");
         alert.setHeaderText("Chat Viewer Help");
         alert.setContentText("Welcome to Chat Viewer!" +
-                "\n\n" +
-                "This application allows you to view chat messages from .msg files. " +
+                "\n\nThis application allows you to view chat messages from .msg files. " +
                 "To get started, click the Open button and select a .msg file. " +
-                "\n\n" +
-                "The messages should be separated by an empty line. The content of the messages should be formated as follows: " +
-                "\n\n" +
-                "Time: 12:00:00" +
-                "\n" +
-                "Name: John" +
-                "\n" +
-                "Message: Hello, how are you?" +
-                "\n\n" +
-                "You can switch between light and dark themes by clicking the theme switch button on the right. " +
-                "\n\n" +
-                "If you have any questions or need help, please contact me via GitHub: " +
-                "\n" +
-                "github.com/anyaachan" +
-                "\n\n" +
-                "Enjoy using Chat Viewer!");
+                "\n\nThe messages should be separated by an empty line. The content of the messages should be formatted as follows: " +
+                "\n\nTime: 12:00:00\nName: John\nMessage: Hello, how are you?" +
+                "\n\nYou can switch between light and dark themes by clicking the theme switch button on the right. " +
+                "\n\nIf you have any questions or need help, please contact me via GitHub: " +
+                "\ngithub.com/anyaachan\n\nEnjoy using Chat Viewer!");
         alert.showAndWait();
     }
 
+    // Switch between light and dark themes when clicking the theme switch button
     @FXML
     public void handleThemeToggle() {
         Scene scene = themeSwitchButton.getScene();
@@ -86,11 +100,13 @@ public class ChatViewerController {
                 scene.getStylesheets().clear();
                 scene.getStylesheets().add("style-dark.css");
                 setButtonImage("theme-switch-white.png", themeSwitchButton);
+                setButtonImage("question-mark-white.png", getHelpButton);
                 darkModeEnabled = true;
             } else {
                 scene.getStylesheets().clear();
                 scene.getStylesheets().add("style-light.css");
-                setButtonImage("theme-switch-black.png", getHelpButton);
+                setButtonImage("theme-switch-black.png", themeSwitchButton);
+                setButtonImage("question-mark-black.png", getHelpButton);
                 darkModeEnabled = false;
             }
         }
@@ -107,10 +123,9 @@ public class ChatViewerController {
         alert.showAndWait();
     }
 
+    // Open file dialog and return the file path
     public String OpenFileDialog() {
         String msgFilePath = null;
-
-        // Try to open the file and get its path
         try {
             msgFilePath = fileImportManager.openMsgFile();
         } catch (Exception e) {
@@ -122,33 +137,7 @@ public class ChatViewerController {
         return msgFilePath;
     }
 
-    public void updateListCell() {
-        // Create a cell factory for messageListView to display messages in a custom way
-        // Callback is a method that is passed as an argument and is called when a specific event occurs
-        // Input type is ListView<Message> (to explain to which list the cell belongs to) and output type is ListCell<Message>
-        messageListView.setCellFactory(new Callback<ListView<Message>, ListCell<Message>>() {
-            // Create listCell for each message with call method
-            @Override
-            public ListCell<Message> call(ListView<Message> messageListView) {
-                // updateItem method overrides ListCell<Message> updateItem method, which is called when the cell needs to be updated
-                return new ListCell<Message>() {
-                    protected void updateItem(Message message, boolean empty) {
-                        super.updateItem(message, empty); // Ensure that built-in functionality executes before adding custom functionality
-                        if (empty || message == null) {
-                            setText(null);
-                            setGraphic(null);
-                        } else {
-                            VBox vBox = new MessageBox(message);
-                            setGraphic(vBox);
-                        }
-                        setPrefWidth(0);
-                        setMaxWidth(Double.MAX_VALUE);
-                    }
-                };
-            }
-        });
-    }
-
+    // Handler for the Open button, loads messages into ListView
     @FXML
     public void loadMsgFile() throws IOException {
         Conversation conversation = new Conversation();
@@ -158,7 +147,8 @@ public class ChatViewerController {
         conversation.retrieveFileNameFromPath(msgFilePath);
         infoLabel.setText(conversation.getFileName());
 
-        // Get messages and set them to the conversation. Even if the msgObject is  empty, it will be handled in the next step.
+        // Get messages into array list
+        // Empty or null msgObject will be handled when populating them into conversation.
         ArrayList<Message> msgObjects = fileImportManager.readMsgFile(msgFilePath);
 
         try {
@@ -173,11 +163,10 @@ public class ChatViewerController {
                             "\n\n" + "Error: " + e.getMessage());
         }
 
-        // Convert ArrayList to ObservableList, as ListView requires ObservableList. ObservableList allows listeners to track changes when they occur.
+        // ListView requires ObservableLis, which allows listeners to track changes when they occur.
         ObservableList<Message> observableMessages = FXCollections.observableArrayList(conversation.getMessages());
-        messageListView.setItems(observableMessages); // Populate the list
+        messageListView.setItems(observableMessages); // Populate the ListView
 
-        updateListCell();
     }
 }
 
