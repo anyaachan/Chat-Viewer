@@ -4,10 +4,8 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
-// Main code, the entry point of the application
 public class ChatViewer extends Application {
     @Override
     public void start(Stage stage) throws IOException {
