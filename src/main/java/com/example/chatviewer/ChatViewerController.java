@@ -128,6 +128,14 @@ public class ChatViewerController {
         alert.setHeaderText(alertHeader);
         alert.setContentText(alertText);
 
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.getStyleClass().add("dialog-pane");
+        if (darkModeEnabled) {
+            dialogPane.getStylesheets().add("style-dark.css");
+        } else {
+            dialogPane.getStylesheets().add("style-light.css");
+        }
+
         alert.showAndWait();
     }
 

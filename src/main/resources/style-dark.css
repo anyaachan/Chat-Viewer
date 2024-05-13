@@ -24,7 +24,6 @@
 
 .dialog-pane > .header-panel {
     -fx-background-color: #151b35;
-    -fx-background-radius: 10;
 }
 
 .dialog-pane > .header-panel > .label {
