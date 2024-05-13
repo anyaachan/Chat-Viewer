@@ -10,4 +10,6 @@ module com.example.chatviewer {
     exports com.example.chatviewer;
     exports com.example.chatviewer.data;
     opens com.example.chatviewer.data to javafx.fxml;
+    exports com.example.chatviewer.data.importer;
+    opens com.example.chatviewer.data.importer to javafx.fxml;
 }

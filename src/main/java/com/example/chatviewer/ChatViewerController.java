@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.example.chatviewer.data.Conversation;
 import com.example.chatviewer.data.Message;
+import com.example.chatviewer.data.importer.MsgFileImporter;
 import com.example.chatviewer.ui.MessageBox;
 
 import javafx.collections.FXCollections;
@@ -31,7 +32,7 @@ public class ChatViewerController {
     private Button getHelpButton;
     @FXML
     private ListView<Message> messageListView; // List of messages
-    private FileImportManager fileImportManager = new FileImportManager();
+    private MsgFileImporter msgFileImporter = new MsgFileImporter();
     private boolean darkModeEnabled = false;
 
     public void setButtonImage(String imagePath,
@@ -127,7 +128,7 @@ public class ChatViewerController {
     public String OpenFileDialog() {
         String msgFilePath = null;
         try {
-            msgFilePath = fileImportManager.openMsgFile();
+            msgFilePath = msgFileImporter.openFile();
         } catch (Exception e) {
             displayErrorAlert("Error",
                     "Error opening file",
@@ -149,7 +150,7 @@ public class ChatViewerController {
 
         // Get messages into array list
         // Empty or null msgObject will be handled when populating them into conversation.
-        ArrayList<Message> msgObjects = fileImportManager.readMsgFile(msgFilePath);
+        ArrayList<Message> msgObjects = msgFileImporter.readFile(msgFilePath);
 
         try {
             conversation.setMessages(msgObjects);

@@ -1,6 +1,7 @@
-package com.example.chatviewer;
+package com.example.chatviewer.data.importer;
 
 import com.example.chatviewer.data.Message;
+import com.example.chatviewer.data.importer.FileImporter;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -13,9 +14,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 
-public class FileImportManager {
+public class MsgFileImporter implements FileImporter {
 
-    public String openMsgFile() {
+    public String openFile() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Please Open .msg File");
 
@@ -24,13 +25,15 @@ public class FileImportManager {
 
         Stage mainStage = new Stage();
         File msg = fileChooser.showOpenDialog(mainStage);
-        String msgFilePath = msg.getAbsolutePath();
-//        System.out.println(msg);
 
-        return msgFilePath;
+        if (msg != null) {
+            return msg.getAbsolutePath();
+        } else {
+            return null;
+        }
     }
 
-    public ArrayList<Message> readMsgFile(String msgFilePath) throws IOException {
+    public ArrayList<Message> readFile(String msgFilePath) throws IOException {
         File msgFile = new File(msgFilePath);
         ArrayList<Message> msgObjects = new ArrayList<Message>();
 
