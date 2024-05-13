@@ -144,6 +144,10 @@ public class ChatViewerController {
         Conversation conversation = new Conversation();
         String msgFilePath = OpenFileDialog();
 
+        if (msgFilePath == null) {
+            return;
+        }
+
         // Get file name and set it to the label
         conversation.retrieveFileNameFromPath(msgFilePath);
         infoLabel.setText(conversation.getFileName());
