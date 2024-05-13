@@ -23,6 +23,9 @@
     -fx-font-weight: bold;
 }
 
+.messageListView {
+}
+
 .messageListView .scroll-bar {
     -fx-background-color: transparent;
     -fx-background-radius: 10;
@@ -50,4 +53,13 @@
 .messageListView .increment-arrow,
 .messageListView .decrement-arrow {
     -fx-shape: " ";
+}
+
+.dialog-pane .button-bar .button {
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+}
+
+.dialog-pane > .header-panel {
+    -fx-background-radius: 10;
 }

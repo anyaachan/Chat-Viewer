@@ -89,6 +89,13 @@ public class ChatViewerController {
                 "\n\nYou can switch between light and dark themes by clicking the theme switch button on the right. " +
                 "\n\nIf you have any questions or need help, please contact me via GitHub: " +
                 "\ngithub.com/anyaachan\n\nEnjoy using Chat Viewer!");
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.getStyleClass().add("dialog-pane");
+        if (darkModeEnabled) {
+            dialogPane.getStylesheets().add("style-dark.css");
+        } else {
+            dialogPane.getStylesheets().add("style-light.css");
+        }
         alert.showAndWait();
     }
 

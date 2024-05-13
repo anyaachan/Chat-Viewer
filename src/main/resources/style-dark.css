@@ -18,6 +18,38 @@
     -fx-background-color: #1b234a !important;
 }
 
+.dialog-pane {
+    -fx-background-color: #1b234a !important;
+}
+
+.dialog-pane > .header-panel {
+    -fx-background-color: #151b35;
+    -fx-background-radius: 10;
+}
+
+.dialog-pane > .header-panel > .label {
+    -fx-text-fill: rgb(255, 255, 255, 0.9);
+}
+
+.dialog-pane > .content {
+    -fx-text-fill: rgb(255, 255, 255, 0.9);
+}
+
+.dialog-pane > .button-bar {
+    -fx-background-color: #1b234a;
+}
+
+.dialog-pane .button-bar .button {
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-background-color: linear-gradient(to top, #222c5d, #303e82);
+    -fx-text-fill: #ffffff !important;
+    -fx-border-color: #0d1125 !important;
+}
+
+.dialog-pane {
+    -fx-padding: 0;
+}
 
 .infoLabel {
     -fx-text-fill: rgb(255, 255, 255, 0.9);
@@ -26,17 +58,16 @@
 .openButton {
     -fx-background-radius: 20;
     -fx-border-radius: 20;
-    -fx-background-color: linear-gradient(to top, #1b234a, #222c5d);
+    -fx-background-color: linear-gradient(to top, #222c5d, #303e82);
     -fx-text-fill: #ffffff !important;
-    -fx-border-color: #0d1125 !important;
 }
 
 .openButton:hover {
-    -fx-background-color: #31385c !important;
+    -fx-background-color: #303e82 !important;
 }
 
 .openButton:pressed {
-    -fx-background-color: #181f42 !important;
+    -fx-background-color: #1e2753 !important;
 }
 
 .message-text {
