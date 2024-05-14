@@ -165,7 +165,6 @@ public class ChatViewerController {
 
         // Get file name and set it to the label
         conversation.retrieveFileNameFromPath(msgFilePath);
-        infoLabel.setText(conversation.getFileName());
 
         // Get messages into array list
         // Empty or null msgObject will be handled when populating them into conversation.
@@ -174,6 +173,7 @@ public class ChatViewerController {
         try {
             conversation.setMessages(msgObjects);
             conversation.replaceSameNicknamesWithDots();
+            infoLabel.setText(conversation.getFileName());
             // Catch any error occuring due to the msg file having incorrect messages format inside
         } catch (Exception e) {
             displayErrorAlert("Error",
@@ -181,6 +181,7 @@ public class ChatViewerController {
                     "No messages found in the file or the messages are not formatted correctly. Please check the file and try again. " +
                             "You can find an example of .msg files in the corresponding GitHub repository. " +
                             "\n\n" + "Error: " + e.getMessage());
+            return;
         }
 
         // ListView requires ObservableLis, which allows listeners to track changes when they occur.

@@ -53,11 +53,20 @@ public class MsgFileImporter implements FileImporter {
                     message = new Message();
                     message.setTimestamp(strCurrentLine.split("Time\\s*:")[1].trim());
                 } else if (strCurrentLine.startsWith("Name")) {
-                    message.setNickname(strCurrentLine.split("Name\\s*:")[1].trim());
+                    // If the app finds several Name or Message without Time specified first, the conversation will be marked as invalid
+                    if (message.getNickname() == null) {
+                        message.setNickname(strCurrentLine.split("Name\\s*:")[1].trim());
+                    } else {
+                        return null;
+                    }
                 } else if (strCurrentLine.startsWith("Message")) {
-                    messageContent = strCurrentLine.split("Message\\s*:");
-                    if (messageContent.length != 0) {
-                        message.setContent(messageContent[1].trim());
+                    if (message.getContent() == null) {
+                        messageContent = strCurrentLine.split("Message\\s*:");
+                        if (messageContent.length != 0) {
+                            message.setContent(messageContent[1].trim());
+                        }
+                    } else {
+                        return null;
                     }
                 }
             }
