@@ -1,9 +1,12 @@
 package com.example.chatviewer;
 
+import java.io.File;
 import java.io.IOException;
 
 import com.example.chatviewer.data.Conversation;
 import com.example.chatviewer.data.Message;
+import com.example.chatviewer.data.importer.FileImporter;
+import com.example.chatviewer.data.importer.FileImporterFactory;
 import com.example.chatviewer.data.importer.MsgFileImporter;
 import com.example.chatviewer.ui.MessageBox;
 
@@ -18,6 +21,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import java.util.ArrayList;
 
@@ -143,7 +148,20 @@ public class ChatViewerController {
     public String OpenFileDialog() {
         String msgFilePath = null;
         try {
-            msgFilePath = msgFileImporter.openFile();
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Please Open .msg File");
+
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Message Files", "*.msg"));
+
+            Stage mainStage = new Stage();
+            File msg = fileChooser.showOpenDialog(mainStage);
+
+            if (msg != null) {
+                msgFilePath =  msg.getAbsolutePath();
+            } else {
+                return null;
+            }
         } catch (Exception e) {
             displayErrorAlert("Error",
                     "Error opening file",
@@ -168,7 +186,8 @@ public class ChatViewerController {
 
         // Get messages into array list
         // Empty or null msgObject will be handled when populating them into conversation.
-        ArrayList<Message> msgObjects = msgFileImporter.readFile(msgFilePath);
+        FileImporter fileImporter = FileImporterFactory.getFileImporter(msgFilePath);
+        ArrayList<Message> msgObjects = fileImporter.readFile(msgFilePath);
 
         try {
             conversation.setMessages(msgObjects);

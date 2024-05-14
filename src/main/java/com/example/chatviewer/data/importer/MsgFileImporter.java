@@ -15,24 +15,6 @@ import java.io.FileReader;
 import java.util.ArrayList;
 
 public class MsgFileImporter implements FileImporter {
-
-    public String openFile() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Please Open .msg File");
-
-        fileChooser.getExtensionFilters().addAll(
-                new ExtensionFilter("Message Files", "*.msg"));
-
-        Stage mainStage = new Stage();
-        File msg = fileChooser.showOpenDialog(mainStage);
-
-        if (msg != null) {
-            return msg.getAbsolutePath();
-        } else {
-            return null;
-        }
-    }
-
     public ArrayList<Message> readFile(String msgFilePath) throws IOException {
         File msgFile = new File(msgFilePath);
         ArrayList<Message> msgObjects = new ArrayList<Message>();
