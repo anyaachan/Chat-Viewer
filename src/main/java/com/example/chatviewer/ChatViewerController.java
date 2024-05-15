@@ -191,7 +191,7 @@ public class ChatViewerController {
 
         try {
             conversation.setMessages(msgObjects);
-            conversation.replaceSameNicknamesWithDots();
+            conversation.replaceSameNicknamesWithSpace();
             infoLabel.setText(conversation.getFileName());
             // Catch any error occuring due to the msg file having incorrect messages format inside
         } catch (Exception e) {

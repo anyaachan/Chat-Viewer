@@ -21,7 +21,7 @@ public class Conversation {
 
     // If there are multiple messages from the same user in a row, replace the nickname with a space
     // Better readability in the chat and design
-    public void replaceSameNicknamesWithDots() {
+    public void replaceSameNicknamesWithSpace() {
         String messageName = messages.get(0).getNickname();
         for (int i = 0; i < messages.size(); i++) {
             Message message = messages.get(i);
