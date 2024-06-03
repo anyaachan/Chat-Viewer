@@ -9,7 +9,17 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 
+/**
+ * Parses message data from .msg files.
+ */
 public class MsgFileImporter implements FileImporter {
+    /**
+     * Reads the content of a .msg file using BufferedReader and creates Message objects from it.
+     *
+     * @param msgFilePath String path to the .msg file
+     * @return an ArrayList of Message objects; null if any parsing error occurs, indicating an invalid message format.
+     * @throws IOException if error occurs opening or reading the file.
+     */
     public ArrayList<Message> readFile(String msgFilePath) throws IOException {
         File msgFile = new File(msgFilePath);
         ArrayList<Message> msgObjects = new ArrayList<Message>();

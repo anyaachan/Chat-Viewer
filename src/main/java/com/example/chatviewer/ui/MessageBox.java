@@ -9,9 +9,18 @@ import javafx.scene.text.TextFlow;
 
 import java.util.ArrayList;
 
-// Single message representation in VBox, will be used in ListView
+/**
+ * Constructs a VBox which represents a single message in the chat.
+ */
 public class MessageBox extends VBox {
-
+    /**
+     * This constructor handles the layout of the message content in VBox, including the nickname,
+     * timestamp, and the text of the message itself. Emoticons in the message are converted to images.
+     * Nicknames that are replaced with a space are not displayed.
+     * <p>
+     * Each part of the message is individually styled and added to the overall layout.
+     * @param message The message to be displayed.
+     */
     public MessageBox(Message message) {
         super();
         // Nickname, do not display if it is empty (when the message is from the same user as a previous one)
@@ -27,7 +36,7 @@ public class MessageBox extends VBox {
         Text timestampText = new Text("[" + message.getTimestamp() + "]  ");
         timestampText.getStyleClass().add("timestamp-text");
         messageFlow.getChildren().add(timestampText);
-        // Content
+        // Content, add emoticons as images
         ArrayList<String> messageParts = message.splitMessageByEmoticonSymbols();
         for (String part : messageParts) {
             if (part.equals(":)")) {

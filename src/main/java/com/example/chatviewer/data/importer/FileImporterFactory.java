@@ -1,7 +1,14 @@
 package com.example.chatviewer.data.importer;
 
-// Class Factory is a method that selects a class
+/**
+ * Factory class for creating FileImporter implementations.
+ */
 public class FileImporterFactory {
+    /**
+     * Returns a FileImporter implementation based on the file extension.
+     * @param filePath path to the file to be imported
+     * @return a FileImporter implementation
+     */
     public static FileImporter getFileImporter(String filePath) {
         if (filePath.endsWith(".msg")) {
             return new MsgFileImporter();

@@ -10,10 +10,10 @@ import java.util.regex.Pattern;
 
 /**
  * Represents a single message, including details such as the timestamp,
- * nickname of the user who sent it, and the content of the message.
- * This class provides methods to set and retrieve these properties, as well as to split
- * the message content into parts based on emoticon symbols for enhanced processing.
+ * users nickname, and the content of the message.
+ * Provides methods for message content manipulation.
  */
+
 public class Message {
     private String timestamp;
     private String nickname;
