@@ -19,6 +19,7 @@ public class MessageBox extends VBox {
      * Nicknames that are replaced with a space are not displayed.
      * <p>
      * Each part of the message is individually styled and added to the overall layout.
+     *
      * @param message The message to be displayed.
      */
     public MessageBox(Message message) {

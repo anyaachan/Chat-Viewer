@@ -23,13 +23,17 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+
 import java.util.ArrayList;
+
+/**
+ * Controller class for the Chat Viewer application.
+ * Handles the interaction between the user interface and the data model.
+ */
 
 public class ChatViewerController {
     @FXML
     private Label infoLabel;
-    @FXML
-    private Button openButton; // Opening file dialog
     @FXML
     private Button themeSwitchButton;
     @FXML
@@ -38,6 +42,12 @@ public class ChatViewerController {
     private ListView<Message> messageListView; // List of messages
     private boolean darkModeEnabled = false;
 
+    /**
+     * Sets the image as the icon of the button.
+     *
+     * @param imagePath path to the image file
+     * @param button    button to set the image to
+     */
     public void setButtonImage(String imagePath,
                                Button button) {
         ImageView themeImageView = new ImageView(new Image(imagePath));
@@ -48,6 +58,10 @@ public class ChatViewerController {
         button.setGraphic(themeImageView);
     }
 
+    /**
+     * Initializes the controller class. This method is automatically called after the FXML file has been loaded.
+     * Sets the appearance of the buttons and the cells of ListView.
+     */
     public void initialize() {
         setButtonImage("theme-switch-black.png", themeSwitchButton);
         setButtonImage("question-mark-black.png", getHelpButton);
@@ -78,7 +92,11 @@ public class ChatViewerController {
         });
     }
 
-    // Usage instructions, displayed when clicking the help button
+    /**
+     * Displays a help dialog with instructions on how to use the application. Displayed when the help button is clicked.
+     *
+     * @throws IOException
+     */
     @FXML
     public void openHelpPopUp() throws IOException {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -102,7 +120,9 @@ public class ChatViewerController {
         alert.showAndWait();
     }
 
-    // Switch between light and dark themes when clicking the theme switch button
+    /**
+     * Switches between light and dark themes when the theme switch button is clicked.
+     */
     @FXML
     public void handleThemeToggle() {
         Scene scene = themeSwitchButton.getScene();
@@ -123,6 +143,13 @@ public class ChatViewerController {
         }
     }
 
+    /**
+     * Displays a custom error alert with the specified title, header, and text.
+     *
+     * @param alertTitle  the title of the alert
+     * @param alertHeader the header of the alert
+     * @param alertText   the text of the alert
+     */
     public void displayErrorAlert(String alertTitle,
                                   String alertHeader,
                                   String alertText) {
@@ -142,7 +169,11 @@ public class ChatViewerController {
         alert.showAndWait();
     }
 
-    // Open file dialog and return the file path
+    /**
+     * Opens a file selection dialog and returns the path to the selected file.
+     *
+     * @return the path to the selected file
+     */
     public String OpenFileDialog() {
         String msgFilePath = null;
         try {
@@ -157,7 +188,7 @@ public class ChatViewerController {
             File msg = fileChooser.showOpenDialog(mainStage);
 
             if (msg != null) {
-                msgFilePath =  msg.getAbsolutePath();
+                msgFilePath = msg.getAbsolutePath();
             } else {
                 return null;
             }
@@ -171,6 +202,11 @@ public class ChatViewerController {
     }
 
     // Handler for the Open button, loads messages into ListView
+
+    /**
+     * Loads messages from a file into the ListView. Handles file selection, message parsing, and message display in the ListView.
+     * Called when the "Open File" button is clicked.
+     */
     @FXML
     public void loadMsgFile() throws IOException {
         Conversation conversation = new Conversation();

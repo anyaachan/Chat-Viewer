@@ -6,6 +6,7 @@ package com.example.chatviewer.data.importer;
 public class FileImporterFactory {
     /**
      * Returns a FileImporter implementation based on the file extension.
+     *
      * @param filePath path to the file to be imported
      * @return a FileImporter implementation
      */

@@ -24,19 +24,18 @@ public class MsgFileImporter implements FileImporter {
         File msgFile = new File(msgFilePath);
         ArrayList<Message> msgObjects = new ArrayList<Message>();
 
-        // Using try with BufferedReader as a resource to ensure that it will be closed if an exception occurs
         String strCurrentLine;
         String[] messageContent;
         Message message = null;
 
+        // Using try with BufferedReader as a resource to ensure that it will be closed if an exception occurs
         try (BufferedReader objReader = new BufferedReader(new FileReader(msgFile))) {
             while ((strCurrentLine = objReader.readLine()) != null) {
                 if (strCurrentLine.startsWith("Time")) {
-
+                    // Only add the message to the list if all the fields are present
                     if ((message != null) && (message.getTimestamp() != null) && (message.getNickname() != null) && (message.getContent() != null)) {
                         msgObjects.add(message);
                     }
-
                     message = new Message();
                     message.setTimestamp(strCurrentLine.split("Time\\s*:")[1].trim());
                 } else if (strCurrentLine.startsWith("Name")) {
@@ -49,6 +48,7 @@ public class MsgFileImporter implements FileImporter {
                 } else if (strCurrentLine.startsWith("Message")) {
                     if (message.getContent() == null) {
                         messageContent = strCurrentLine.split("Message\\s*:");
+                        // If the message has no content, it won't be added to the list
                         if (messageContent.length != 0) {
                             message.setContent(messageContent[1].trim());
                         }

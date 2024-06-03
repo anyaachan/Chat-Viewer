@@ -2,6 +2,7 @@ package com.example.chatviewer.data;
 
 import java.util.ArrayList;
 import java.util.Objects;
+
 /**
  * Represents a conversation, which consists of multiple messages.
  * <p>
@@ -13,6 +14,7 @@ public class Conversation {
 
     /**
      * Sets the list of messages for this conversation.
+     *
      * @param messages An ArrayList of Message objects to be stored in this conversation.
      */
     public void setMessages(ArrayList<Message> messages) {
@@ -21,6 +23,7 @@ public class Conversation {
 
     /**
      * Retrieves the list of messages in this conversation.
+     *
      * @return An ArrayList of Message objects currently stored in this conversation.
      */
     public ArrayList<Message> getMessages() {
@@ -29,6 +32,7 @@ public class Conversation {
 
     /**
      * Retrieves the name of the file from which the messages are loaded.
+     *
      * @return String representing the file name.
      */
     public String getFileName() {
@@ -53,6 +57,7 @@ public class Conversation {
 
     /**
      * Extracts the name of the file from the filepath.
+     *
      * @param path the path to the file.
      */
     public void retrieveFileNameFromPath(String path) {

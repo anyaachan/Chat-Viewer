@@ -21,41 +21,52 @@ public class Message {
 
     /**
      * Sets the timestamp of the message.
+     *
      * @param timestamp timestamp in the format "hh:mm:ss"
      */
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
+
     /**
      * Sets the nickname of the user who sent the message.
+     *
      * @param nickname nickname of the user
      */
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
+
     /**
      * Sets the content of the message.
+     *
      * @param content text of the message
      */
     public void setContent(String content) {
         this.content = content;
     }
+
     /**
      * Retrieves the timestamp of the message.
+     *
      * @return A string representing the time the message was sent.
      */
     public String getTimestamp() {
         return timestamp;
     }
+
     /**
      * Retrieves the nickname of the user who sent the message.
+     *
      * @return A string representing the nickname of the user.
      */
     public String getNickname() {
         return nickname;
     }
+
     /**
      * Retrieves the content of the message.
+     *
      * @return A string representing the content of the message.
      */
     public String getContent() {

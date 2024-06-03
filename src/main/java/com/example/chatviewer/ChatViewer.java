@@ -4,8 +4,13 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 
+/**
+ * Main class for the Chat Viewer application.
+ * Launches the JavaFX application.
+ */
 public class ChatViewer extends Application {
     @Override
     public void start(Stage stage) throws IOException {
