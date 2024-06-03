@@ -7,7 +7,6 @@ import com.example.chatviewer.data.Conversation;
 import com.example.chatviewer.data.Message;
 import com.example.chatviewer.data.importer.FileImporter;
 import com.example.chatviewer.data.importer.FileImporterFactory;
-import com.example.chatviewer.data.importer.MsgFileImporter;
 import com.example.chatviewer.ui.MessageBox;
 
 import javafx.collections.FXCollections;
@@ -37,7 +36,6 @@ public class ChatViewerController {
     private Button getHelpButton;
     @FXML
     private ListView<Message> messageListView; // List of messages
-    private MsgFileImporter msgFileImporter = new MsgFileImporter();
     private boolean darkModeEnabled = false;
 
     public void setButtonImage(String imagePath,
@@ -152,7 +150,8 @@ public class ChatViewerController {
             fileChooser.setTitle("Please Open .msg File");
 
             fileChooser.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("Message Files", "*.msg"));
+                    new FileChooser.ExtensionFilter("Message Files", "*.msg"),
+                    new FileChooser.ExtensionFilter("All Files", "*.*"));
 
             Stage mainStage = new Stage();
             File msg = fileChooser.showOpenDialog(mainStage);
@@ -206,7 +205,6 @@ public class ChatViewerController {
         // ListView requires ObservableLis, which allows listeners to track changes when they occur.
         ObservableList<Message> observableMessages = FXCollections.observableArrayList(conversation.getMessages());
         messageListView.setItems(observableMessages); // Populate the ListView
-
     }
 }
 

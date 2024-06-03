@@ -1,14 +1,9 @@
 package com.example.chatviewer.data.importer;
 
 import com.example.chatviewer.data.Message;
-import com.example.chatviewer.data.importer.FileImporter;
-import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.io.IOException;
-
-import javafx.stage.FileChooser.ExtensionFilter;
-import javafx.stage.Stage;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
