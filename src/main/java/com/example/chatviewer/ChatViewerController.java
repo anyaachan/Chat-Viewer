@@ -30,16 +30,20 @@ import java.util.ArrayList;
  * Controller class for the Chat Viewer application.
  * Handles the interaction between the user interface and the data model.
  */
-
 public class ChatViewerController {
+    /** Label to display the name of the file being viewed */
     @FXML
     private Label infoLabel;
+    /** Button to switch between light and dark themes */
     @FXML
     private Button themeSwitchButton;
+    /** Button to display dialog with "Help" information for the user */
     @FXML
     private Button getHelpButton;
+    /** ListView to display the list of messages */
     @FXML
-    private ListView<Message> messageListView; // List of messages
+    private ListView<Message> messageListView;
+    /** Boolean flag to track the current theme state */
     private boolean darkModeEnabled = false;
 
     /**
@@ -206,6 +210,8 @@ public class ChatViewerController {
     /**
      * Loads messages from a file into the ListView. Handles file selection, message parsing, and message display in the ListView.
      * Called when the "Open File" button is clicked.
+     *
+     * @throws IOException if an I/O error occurs
      */
     @FXML
     public void loadMsgFile() throws IOException {

@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class MsgFileImporter implements FileImporter {
     /**
-     * Reads the content of a .msg file using BufferedReader and creates Message objects from it.
+     * Opens and reads the content of a .msg file using BufferedReader and creates a list of Message objects from it.
      *
      * @param msgFilePath String path to the .msg file
      * @return an ArrayList of Message objects; null if any parsing error occurs, indicating an invalid message format.

@@ -9,7 +9,9 @@ import java.util.Objects;
  * Handles operations on the list of related messages.
  */
 public class Conversation {
+    /** List of messages in this conversation */
     private ArrayList<Message> messages;
+    /** Name of the file from which the messages are loaded */
     private String fileName;
 
     /**

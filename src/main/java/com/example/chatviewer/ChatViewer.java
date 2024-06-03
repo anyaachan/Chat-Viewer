@@ -23,7 +23,7 @@ public class ChatViewer extends Application {
         stage.setMinWidth(410);
         scene.getStylesheets().add("style-light.css");
     }
-
+    /** Launches the JavaFX application. */
     public static void main(String[] args) {
         launch();
     }
